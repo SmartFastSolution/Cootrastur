@@ -1,0 +1,80 @@
+
+{
+    "menu" :[
+        {
+            "url"  : "",
+            "name" : "Administración",
+            "icon" : "shield",
+            "can"  : "administracion",
+              "submenu" :[
+                  {
+
+                    "route" : "admin.control.permisos",
+                    "url"   : "admin/control-permisos",
+                    "name"  : "Lista de Roles",
+                    "can"   :"roles"
+                },
+                {
+
+                    "route" : "admin.usuario.index",
+                    "url"   : "admin/lista-usuarios",
+                    "name"  : "Lista de Usuarios",
+                    "can"   :"usuarios"
+                  }
+            ]
+        },
+        {
+            "url"  : "",
+            "name" : "Mantenimiento(s)",
+            "icon" : "grid",
+            "can"  : "mantenimientos",
+            "submenu":[
+
+                {
+
+                    "route" : "supplier.tipo.crear",
+                    "url"   : "supplier/supplier-list",
+                    "name"  : "Lista de Proveedores",
+                    "can"   : "m-proveedores"
+
+                },
+                {
+
+                    "route" : "partner.crear",
+                    "url"   : "partner/partner-list",
+                    "name"  : "Lista de Socios",
+                    "can"   : "m-socios"
+
+                },
+                {
+
+                    "route" : "charges.crear",
+                    "url"   : "charges/charges-list",
+                    "name"  : "Lista de Cobros",
+                    "can"   : "m-cobros"
+
+                }
+            ]
+
+        },
+
+        {
+            "url"  : "",
+            "name" : "Ingreso de Facturas",
+            "icon" : "grid",
+            "can"  : "usuarios",
+            "submenu" :[
+               
+
+            ]
+        }
+
+    ]
+
+
+}
+
+
+
+
+
