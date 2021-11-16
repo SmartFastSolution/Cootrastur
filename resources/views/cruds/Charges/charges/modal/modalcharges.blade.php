@@ -15,7 +15,7 @@
             <div class="modal-body " >
                 <div class="row">
                     <div class="col-xs-12 col-md-4 form-group">
-                        <label>Descripcion</label>
+                        <label>Descripción</label>
                         <input type="text" wire:model.defer="description" class="form-control @error('description') is-invalid @enderror" placeholder="Nombres Cobro">
                         @error('description')
                             <p class="error-message text-danger font-weight-bold">{{ $message }}</p>
@@ -36,6 +36,42 @@
                         <label>Valor</label>
                         <input type="number" wire:model.defer="value" class="form-control @error('value') is-invalid @enderror" placeholder="0.00">
                         @error('value')
+                            <p class="error-message text-danger font-weight-bold">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-md-4 form-group">
+                        <label for="email" class="control-label">Clave Cuenta Contable</label>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input type="text" wire:model.defer="key_account" class="form-control @error('key_account') is-invalid @enderror" id="key_account" onchange="buscarCuentaClave();">
+                                @error('key_account')
+                                    <p class="error-message text-danger font-weight-bold">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-4 form-group">
+                        <label for="email" class="control-label">Código Cuenta Contable</label>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input type="text" wire:model.defer="code_account" class="form-control @error('code_account') is-invalid @enderror" id="code_account" onchange="buscarCuentaCodigo();">
+                                @error('code_account')
+                                    <p class="error-message text-danger font-weight-bold">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-4 form-group">
+                        <label>Tipo Cobro</label>
+                        <select  wire:model.defer="type_cobros" class="form-control @error('type_cobros') is-invalid @enderror" id="type_cobros">
+                            <option value="">Elige un Tipo Cobro</option>
+                            <?php foreach($cobrosconfig as $config): ?>                
+                                <option value="<?php echo $config->id ?>"><?php echo $config->description ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                            @error('type_cobros')
                             <p class="error-message text-danger font-weight-bold">{{ $message }}</p>
                         @enderror
                     </div>
@@ -67,3 +103,104 @@
         </div>
     </div>
 </div>
+
+@section('js')
+    <script >
+        
+    $('#code_discount').on('change', function () {
+      if($.trim($('#code_discount').val()) != ''){
+            $("#name_discount").val($('#code_discount option:selected').text());
+            @this.set("name_discount", $('#name_discount').val());
+        }
+});
+
+
+function buscarCuentaClave() {
+    $("#code_account").val("");
+    $.get('{!! route('discount.cuentas') !!}'+'?code='+$("#code_account").val()+'&'+'key='+$("#key_account").val(), function( datos ) {
+        if(datos =="" || datos== null){
+            if($("#code_account").val()==""){
+                iziToast.error({
+                    title: 'Transporte',
+                    message: "No existe cuenta con clave "+$("#key_account").val(),
+                    position: 'topRight'
+                });
+                $("#key_account").val("");
+                $("#code_account").val("");
+            }else{
+                iziToast.error({
+                    title: 'Transporte',
+                    message: "No existe cuenta con Código "+$("#code_account").val(),
+                    position: 'topRight'
+                });
+                $("#key_account").val("");
+                $("#code_account").val("");
+            }
+            
+        }else{
+            if($("#code_account").val()==""){
+                $("#code_account").val(datos)
+                @this.set("code_account", $('#code_account').val());
+                
+            }else{
+                $("#key_account").val(datos)
+                @this.set("key_account", $('#key_account').val());
+            }
+        }
+        
+    }).fail(function() {
+        iziToast.error({
+            title: 'Transporte',
+            message: "Error al buscar Cuenta Contable",
+            position: 'topRight'
+        });
+    });
+    
+} 
+
+
+function buscarCuentaCodigo() {
+    $("#key_account").val("")
+    $.get('{!! route('discount.cuentas') !!}'+'?code='+$("#code_account").val()+'&'+'key='+$("#key_account").val(), function( datos ) {
+        if(datos =="" || datos== null){
+            if($("#code_account").val()==""){
+                iziToast.error({
+                    title: 'Transporte',
+                    message: "No existe cuenta con clave "+$("#key_account").val(),
+                    position: 'topRight'
+                });
+                $("#key_account").val("");
+                $("#code_account").val("");
+            }else{
+                iziToast.error({
+                    title: 'Transporte',
+                    message: "No existe cuenta con Código "+$("#code_account").val(),
+                    position: 'topRight'
+                });
+                $("#key_account").val("");
+                $("#code_account").val("");
+            }
+            
+        }else{
+            if($("#code_account").val()==""){
+                $("#code_account").val(datos)
+                @this.set("code_account", $('#code_account').val());
+                
+            }else{
+                $("#key_account").val(datos)
+                @this.set("key_account", $('#key_account').val());
+            }
+        }
+        
+    }).fail(function() {
+        iziToast.error({
+            title: 'Transporte',
+            message: "Error al buscar Cuenta Contable",
+            position: 'topRight'
+        });
+    });
+    
+} 
+
+</script>
+@endsection

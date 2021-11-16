@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-    <title>SOLUTIONFINANCETAX- Login</title>
+    <title>COOTRA ESTUR LTDA.- Login</title>
     <!-- General CSS Files -->
     <link rel="stylesheet" href=" {{ asset('aegis/source/light/assets/css/app.min.css') }}">
     <link rel="stylesheet" href="{{ asset('aegis/source/light/assets/css/style.css') }}">
@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="{{ asset('aegis/source/light/assets/css/custom.css') }}">
 
     <!-- Template CSS -->
-    <link rel='shortcut icon' type='image/x-icon' href="{{ asset('aegis/source/light/assets/img/icono.ico') }}">
+    <link rel='shortcut icon' type='image/x-icon' href="{{ asset('aegis/source/light/assets/img/Logot.png') }}">
 
 </head>
 
@@ -23,12 +23,13 @@
         <section class="section">
             <div class="container mt-5">
                 <div class="row">
-                    <div  class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4">
+                    
+                    <div  class="col-8 col-sm-5 offset-sm-2 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4">
+                    <!-- <div  class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4"> -->
                         <div class="card card-info">
                            
-                            <div class="card-header">
-                                <img class="nav_logo_img img-fluid top-left" src="digital/images/logo1.png">
-                                
+                            <div class="card-header" >
+                                <img class="nav_logo_img img-fluid top-left" src="digital/images/Logot.png">
                             </div>
                             <h4 class="text-center">INGRESO</h4>
                             <div class="card-body">
@@ -114,3 +115,10 @@
 <!-- Copied from http://radixtouch.in/templates/admin/aegis/source/light/auth-login.html by Cyotek WebCopy 1.7.0.600, Saturday, September 21, 2019, 2:51:57 AM -->
 
 </html>
+
+<style>
+    .nav_logo_img {
+      text-align: center;
+      margin:auto;
+    }
+  </style>

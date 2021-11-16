@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Livewire\WithPagination;
 use Spatie\Permission\Models\Role;
+use Mail;
 class Usuario extends Component
 {
     use WithPagination;
@@ -57,6 +58,7 @@ class Usuario extends Component
 
 
     public function createUser (){
+        $configs = include(base_path().'/config/config.php');
         $this->validate([
             'name'     => 'required',
             'email'    => 'required|email|unique:users,email',
@@ -68,19 +70,36 @@ class Usuario extends Component
             'email.unique'       => 'Este correo ya se encuentra en uso',
             'rol.required'         => 'No has selecionado un rol',
         ]);
-            $this->createMode = true;
-
+            $coreo = $this->email;
             $clave    = 12345678;
-            $user     = new User;
-            $user->name   = $this->name;
-            $user->email  = $this->email; 
-            $user->password     = Hash::make($clave);
-            $user->estado       = $this->estado == 'activo' ? 'activo' : 'inactivo';
-            $user->save();
-            $user->assignRole($this->rol);
-            $this->resetInput();
-            $this->emit('success',['mensaje' => 'Usuario Registrado Correctamente', 'modal' => '#createUser']);
-            $this->createMode = false;
+            $correde = $configs->correo;
+            $data = [
+                'correo' => $coreo,
+                'contra' => $clave,
+            ];
+            Mail::send(['html'=>'mailToUser'], ["data"=>$data], function ($message) use ($coreo,$correde){
+                $message->to($coreo, 'Usuario')->subject('Usuario Creado');
+                $message->from($correde,'COOTRA ESTUR LTDA.');
+            });
+            
+            if(!Mail::failures()) {
+                $this->createMode = true;
+                
+                $user     = new User;
+                $user->name   = $this->name;
+                $user->email  = $this->email; 
+                $user->password     = Hash::make($clave);
+                $user->estado       = $this->estado == 'activo' ? 'activo' : 'inactivo';
+                $user->save();
+                $user->assignRole($this->rol);
+                $this->resetInput();
+                $this->emit('success',['mensaje' => 'Usuario Registrado Correctamente', 'modal' => '#createUser']);
+                $this->createMode = false;
+            }else{
+                $this->emit('success',['mensaje' => 'Error al enviar correo', 'modal' => '#createUser']);
+            }
+            
+            
 
 
     }

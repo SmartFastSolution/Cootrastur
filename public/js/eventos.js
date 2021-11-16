@@ -64,5 +64,22 @@ Livewire.on('eliminarRegistro', function (title, metodo, id) {
               Livewire.emit(metodo,id)
             }
           });
+});
+
+Livewire.on('revertirAsiento', function (title, metodo, id) {
+  Swal.fire({
+          title: title,
+          text: "Esta accion ya no se puede revertir!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Si, Revertir!',
+          cancelButtonText: 'Cancelar!'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            Livewire.emit(metodo,id)
+          }
+        });
 })
 

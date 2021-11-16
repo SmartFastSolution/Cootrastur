@@ -35,7 +35,7 @@
                             <div class="row">
                                 <div class="col-md-3 col-sm-12 col-xs-12 ">
                                     <div class="position-absolute top-0 start-0 translate-middle">
-                                        <img class="nav_logo_img img-fluid top-left" src="digital/images/logo2.ico">
+                                        <img class="nav_logo_img img-fluid top-left" src="digital/images/Logot.png">
                                     </div>
                                 </div>
                                 <div class="col-md-9 col-sm-12 col-xs-12">

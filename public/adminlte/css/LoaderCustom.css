@@ -1,0 +1,122 @@
+
+ .dataTable > thead > tr > th[class*="sort"]::after{display: none}
+:root{
+  --blackish: #282b28;
+  --orange: #0ca09a;
+  --yellow: #eeb902;
+  --grey: #626462;
+  --demaco: #167F92;
+}
+
+
+.demaco{
+      background-color:var(--demaco);  
+    color:white;
+    }
+    
+.loader{
+  position:fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  width: 200px;
+  height: 200px;
+  box-sizing: border-box;
+  z-index: 100;
+}
+
+.loader .face{
+  position: absolute;
+  border: 2px solid var(--grey)
+}
+
+.loader .face.face1{
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  box-shadow: 0 0 10px var(--grey);
+  border-radius: 50%;
+  border-left: 2px solid var(--orange);
+  border-top: 2px solid var(--orange);
+  animation: animate 8s linear infinite;
+}
+
+.loader .face.face2{
+  top: 15px;
+  left: 15px;
+  right: 15px;
+  bottom: 15px;
+  box-shadow: 0 0 10px var(--grey);
+  border-radius: 50%;
+  border-right: 2px solid var(--orange);
+  border-bottom: 2px solid var(--orange);
+  animation: animatee 2.5s linear infinite;
+}
+
+.loader .face .circle{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 50%;
+  height: 2px;
+  transform-origin: left;
+}
+
+.loader .face.face1 .circle{
+  transform: rotate(-45deg);
+}
+
+.loader .face.face2 .circle{
+  transform: rotate(-45deg);
+}
+
+.loader .face .circle:before{
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #FFF;
+  top: -4px;
+  right: -6px;
+}
+
+.loader .face.face1 .circle:before{
+  background: var(--orange);
+  box-shadow: 0 0 20px var(--orange),
+              0 0 40px var(--orange),
+              0 0 60px var(--orange),
+              0 0 80px var(--orange),
+              0 0 100px var(--orange),
+              0 0 0 5px rgba(211, 97, 53,.1);
+
+}
+
+.loader .face.face2 .circle:before{
+  background: var(--orange);
+  box-shadow: 0 0 20px var(--orange),
+              0 0 40px var(--orange),
+              0 0 60px var(--orange),
+              0 0 80px var(--orange),
+              0 0 100px var(--orange),
+              0 0 0 5px rgba(211, 97, 53,.1);
+}
+
+@keyframes animate{
+  0%{
+    transform: rotate(0deg);
+  }
+  100%{
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes animatee{
+  0%{
+    transform: rotate(360deg);
+  }
+  100%{
+    transform: rotate(0deg);
+  }
+}

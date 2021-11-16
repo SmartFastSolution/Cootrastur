@@ -10,7 +10,7 @@
   <meta content="" name="keywords">
 
   <!-- Favicons -->
-  <link href="{{ asset('aegis/source/light/assets/img/icono.ico') }}" rel="icon">
+  <link href="{{ asset('aegis/source/light/assets/img/Logot.png') }}" rel="icon">
   <link href="regna/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
  
   <!-- Google Fonts -->

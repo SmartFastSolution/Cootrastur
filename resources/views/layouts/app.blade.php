@@ -9,13 +9,13 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>SOLUTIONFINANCETAX</title>
+    <title>COOTRA ESTUR LTDA.</title>
     <!-- General CSS Files -->
 
 
     @livewireStyles
    
-    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href=" {{ asset('aegis/source/light/assets/css/app.min.css') }}">  
     <link rel="stylesheet" href="{{ asset('aegis/source/light/assets/css/style.css') }}">
 
@@ -23,22 +23,44 @@
     <link rel="stylesheet" href="{{ asset('aegis/source/light/assets/bundles/izitoast/css/iziToast.min.css') }}">
 
     <!-- Template CSS -->
+    
 
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.css">
     <link href="{{ asset('assets/datatables/css/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/datatables/css/fixedHeader.bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/datatables/css/responsive.bootstrap.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <link rel="stylesheet" href="{{ url('js/dropzone') }}/dropzone.min.css"/>
-
-    <link rel='shortcut icon' type='image/x-icon' href="{{ asset('aegis/source/light/assets/img/icono.ico') }}">
+    <link rel="stylesheet" href=" {{ asset('aegis/source/light/assets/css/LoaderCustom.css') }}">  
+    <link rel="stylesheet" href="{{ asset('aegis/source/light/assets/css/Animations.css') }}">
+    <link rel='shortcut icon' type='image/x-icon' href="{{ asset('aegis/source/light/assets/img/Logot.png') }}">
+    <link rel="stylesheet" href="{{ url('adminlte/plugins/datatables') }}/buttons.dataTables.css"/>
+    <link rel="stylesheet" href="{{ url('adminlte/plugins/datatables') }}/dataTables.bootstrap.css"/>
+    <link rel="stylesheet" href="{{ url('adminlte/plugins/datatables') }}/jquery.dataTables.css"/>
+    <link rel="stylesheet" href="{{ url('adminlte/plugins/datatables') }}/select.dataTables.css"/>
 
 
     @laravelPWA
     @yield('style')
 </head>
-
+<style>
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1; 
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #222d32; 
+  
+    }
+  
+    ::-webkit-scrollbar-thumb:hover {
+      background: #2bba9c; 
+    }
+    </style>
 <body>
-    <div class="loader"></div>
+    @include('partials.topbar')
         <div class="main-wrapper main-wrapper-1">
             <div class="navbar-bg"></div>
             <nav class="navbar navbar-expand-lg main-navbar">
@@ -53,59 +75,7 @@
                     </ul>
                 </div>
                 <ul class="navbar-nav navbar-right " >
-                    <li class="dropdown dropdown-list-toggle"><a href="#" data-toggle="dropdown"
-                            class="nav-link notification-toggle nav-link-lg"><i data-feather="bell"></i>
-                            <span class="badge headerBadge2">
-                                3 </span> </a>
-                        <div class="dropdown-menu dropdown-list dropdown-menu-right pullDown">
-                            <div class="dropdown-header">
-                                Notifications
-                                <div class="float-right">
-                                    <a href="#">Mark All As Read</a>
-                                </div>
-                            </div>
-                            <div class="dropdown-list-content dropdown-list-icons">
-                                <a href="#" class="dropdown-item dropdown-item-unread"> <span
-                                        class="dropdown-item-icon bg-primary text-white"> <i class="fas
-                                                          fa-code"></i>
-                                    </span> <span class="dropdown-item-desc"> Template update is
-                                        available now! <span class="time">2 Min
-                                            Ago</span>
-                                    </span>
-                                </a> <a href="#" class="dropdown-item"> <span
-                                        class="dropdown-item-icon bg-info text-white"> <i class="far
-                                                          fa-user"></i>
-                                    </span> <span class="dropdown-item-desc"> <b>You</b> and <b>Dedik
-                                            Sugiharto</b> are now friends <span class="time">10 Hours
-                                            Ago</span>
-                                    </span>
-                                </a> <a href="#" class="dropdown-item"> <span
-                                        class="dropdown-item-icon bg-success text-white"> <i class="fas
-                                                          fa-check"></i>
-                                    </span> <span class="dropdown-item-desc"> <b>Kusnaedi</b> has
-                                        moved task <b>Fix bug header</b> to <b>Done</b> <span class="time">12
-                                            Hours
-                                            Ago</span>
-                                    </span>
-                                </a> <a href="#" class="dropdown-item"> <span
-                                        class="dropdown-item-icon bg-danger text-white"> <i
-                                            class="fas fa-exclamation-triangle"></i>
-                                    </span> <span class="dropdown-item-desc"> Low disk space. Let's
-                                        clean it! <span class="time">17 Hours Ago</span>
-                                    </span>
-                                </a> <a href="#" class="dropdown-item"> <span
-                                        class="dropdown-item-icon bg-info text-white"> <i class="fas
-                                                          fa-bell"></i>
-                                    </span> <span class="dropdown-item-desc"> Welcome to Aegis
-                                        template! <span class="time">Yesterday</span>
-                                    </span>
-                                </a>
-                            </div>
-                            <div class="dropdown-footer text-center">
-                                <a href="#">View All <i class="fas fa-chevron-right"></i></a>
-                            </div>
-                        </div>
-                    </li>
+                
                     @guest
                         <li  class="dropdown">
                             <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
@@ -122,16 +92,6 @@
                                 <a href="{{ url('/admin/mi-perfil') }}" class="dropdown-item has-icon"> <i class="far
                                             fa-user"></i> Perfil
                                 </a>
-                                <a href="{{ url('/admin/mis-empresas') }}" class="dropdown-item has-icon"> <i class="fas fa-building"></i>
-                                    Mis Empresas
-
-                                  </a>
-                                  <a href="{{ url('/admin/mis-tarjetas-credito') }}"  class="dropdown-item has-icon"> <i class="fas fa-money-check"></i>
-                                    Tarjeta Credito
-                                  </a>
-                                  <a href="" class="dropdown-item has-icon"> <i class="fas fa-gem"></i>
-                                   Mis Planes
-                                  </a>
                                   <div class="dropdown-divider"></div>
                                 <a href="{{ route('logout') }}" class="dropdown-item has-icon text-danger"
                                     onclick="event.preventDefault();
@@ -147,22 +107,30 @@
                     @endguest
                 </ul>
             </nav>
+            
+
+           
             <div class="main-sidebar sidebar-style-2">
                 <aside id="sidebar-wrapper" >
+                    @guest
+                    @else
                     <div class="sidebar-brand">
                         <a href="{{ url('/') }}"> <img alt="image"
-                                src="{{ asset('aegis/source/light/assets/img/logoo.png') }}" class="header-logo">
-                            <span class="logo-name"><font SIZE=1>SOLUTIONFINANCETAX</font></span>
+                                src="{{ asset('aegis/source/light/assets/img/Logot.png') }}" class="header-logo">
+                            <span class="logo-name"><font SIZE=1>COOTRA ESTUR LTDA.</font></span>
                         </a>
                     </div>
                     <div class="sidebar-user">
+                        
                         <div class="sidebar-user-picture">
                             <img alt="image" src="{{ Avatar::create(Auth::user()->name)->setChars(2) }}">
                         </div>
+                       
                         <div class="sidebar-user-details">
                             <div class="user-name"> {{ Auth::user()->name }}</div>
                             <div class="user-role">{{ Auth::user()->roles[0]->name }}</div>
                         </div>
+                       
                     </div>
                     <ul class="sidebar-menu">
                         <li class="menu-header">MENU</li>
@@ -172,8 +140,10 @@
                             @include('layouts.panels.menuVertical',['menu' => $menu])
                             @endforeach
                     </ul>
+                    @endguest
                 </aside>
             </div>
+            
             <!-- Main Content -->
             <div class="main-content" >
 
@@ -251,8 +221,8 @@
                 <div id="app"></div>
             </div>
             <footer class="main-footer">
-                <div class="footer-left">
-                    Copyright &copy; 2019 <div class="bullet"></div> Creado Por <a href="#">SmartFastSolution</a>
+                <!-- <div class="footer-left">
+                    Copyright &copy; 2019 <div class="bullet"></div> Creado Por <a href="#">SmartFastSolution</a> -->
                 </div>
                 <div class="footer-right">
                 </div>
@@ -263,9 +233,11 @@
     <script src="{{ asset('js/app.js') }}"></script>
     @livewireScripts
     
+   
     <!-- General JS Scripts -->
     <script src="{{ asset('assets/js/app.min.js') }}"></script>
     <script src="{{ asset('assets/js/scripts.js') }}"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
     <script src="{{ asset('https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js') }}"></script>
     <script src="{{ asset('//cdn.jsdelivr.net/npm/sweetalert2@11') }}"></script>  
     <script src="{{ asset('js/eventos.js') }}"></script>
@@ -273,10 +245,11 @@
     <script src="{{ url('js/dropzone/dropzone.min.js') }}"></script>
     <script src="{{ url('js/xlsx/xlsx.full.min.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.5/xlsx.full.min.js"></script>
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+
     @livewireChartsScripts
     @yield('js')
 
 </body>
-
+@include('partials.javascripts')
 </html>

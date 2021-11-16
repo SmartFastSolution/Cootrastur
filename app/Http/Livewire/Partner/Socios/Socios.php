@@ -49,6 +49,7 @@ public $bank;
 public $account_bank;
 public $driver;
 public $type_account;
+public $code_account;
 public $roles=[];
 
 
@@ -101,7 +102,7 @@ public $satellite;
                       'license_plate','year_vehicle','chasis','motor','name_partner','address_partner','email',
                       'bank','account_bank','driver','type_account','type_vehicule','payment_aditional','safe_vehicule',
                       'ptmo','saving','other','iess','garage','cleaning','penalty_fee','safe_internal','store','membership',
-                      'sensor','satellite','editMode']);
+                      'sensor','satellite','code_account','editMode']);
         $this->resetValidation();
     }
 
@@ -136,6 +137,7 @@ public $satellite;
             $p->phone1 = $this->phone1;
             $p->phone2 = $this->phone2;
             $p->email  = $this->email;
+            $p->code_account  = $this->code_account;
             $p->bank = $this->bank;
             $p->account_bank = $this->account_bank;
             $p->driver = $this->driver;
@@ -180,6 +182,7 @@ public $satellite;
         $this->date_begin      = $c->date_begin;
         $this->line            = $c->line;
         $this->license_plate   = $c->license_plate;
+        $this->code_account     = $c->code_account;
         $this->year_vehicle    = $c->year_vehicle;
         $this->chasis          = $c->chasis;
         $this->motor           = $c->motor;
@@ -249,7 +252,8 @@ public $satellite;
         $m->phone1          = $this->phone1;
         $m->phone2          = $this->phone2;
         $m->email           = $this->email;
-        $m->bank         = $this->bank;
+        $m->code_account     = $this->code_account;
+        $m->bank            = $this->bank;
         $m->account_bank    = $this->account_bank;
         $m->driver          = $this->driver;
         $m->type_account    = $this->type_account;

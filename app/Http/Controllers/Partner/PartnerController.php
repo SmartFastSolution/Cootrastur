@@ -83,7 +83,8 @@ class PartnerController extends Controller
                         'account_bank' =>  $data['NUMERO CUENTA'],
                         'driver' => $data['CHOFER'],
                         'type_account' => $data['TIPO CUENTA'],
-                        'status' =>  'activo'
+                        'status' =>  'activo',
+                        'code_account' => $data['CUENTA CONTABLE']
                     ]);
                     $idparnet = \DB::getPdo()->lastInsertId();
     
@@ -138,7 +139,13 @@ class PartnerController extends Controller
    // } 
    }
 
-   
+   public function buscarCuentas(Request $request)
+   {
+        $code = $request->code;
+        $cuentasContables = DB::table('account_plan')->where('code_account',$code)->where('display','S')->where('status','activo')->first();
+        return $cuentasContables->description;
+
+   }
   
 
 }

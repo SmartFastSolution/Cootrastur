@@ -63,14 +63,21 @@ class RouteServiceProvider extends ServiceProvider
              ->group(function(){
                require base_path('routes/web.php');
                require base_path('routes/web/admin.php');
-               require base_path('routes/web/servicio.php');
-               require base_path('routes/web/tienda.php');
                require base_path('routes/web/reportes.php');
-               require base_path('routes/web/indicadores.php');
-               require base_path('routes/web/ingreso_facturas.php');
                require base_path('routes/web/proveedores.php');
                require base_path('routes/web/socios.php');
                require base_path('routes/web/cobros.php');
+               require base_path('routes/web/rubros.php');
+               require base_path('routes/web/cuentas.php');
+               require base_path('routes/web/asientos.php');
+               require base_path('routes/web/facturas.php');
+               require base_path('routes/web/descuentos.php');
+               require base_path('routes/web/retenciones.php');
+               require base_path('routes/web/bancos.php');
+               require base_path('routes/web/anticipos.php');
+               require base_path('routes/web/estado.php');
+               require base_path('routes/web/cobrosconfig.php');
+               require base_path('routes/web/parametroscontables.php');
              });
     }
 

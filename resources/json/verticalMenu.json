@@ -20,7 +20,14 @@
                     "url"   : "admin/lista-usuarios",
                     "name"  : "Lista de Usuarios",
                     "can"   :"usuarios"
-                  }
+                },
+                {
+
+                    "route" : "parameter.crear",
+                    "url"   : "parameter/parameter-list",
+                    "name"  : "Parámetros Contables",
+                    "can"   :"m-parameter"
+                }
             ]
         },
         {
@@ -30,6 +37,14 @@
             "can"  : "mantenimientos",
             "submenu":[
 
+                {
+
+                    "route" : "banks.crear",
+                    "url"   : "banks/bank-list",
+                    "name"  : "Bancos",
+                    "can"   : "m-banks"
+
+                },
                 {
 
                     "route" : "supplier.tipo.crear",
@@ -53,6 +68,21 @@
                     "name"  : "Lista de Cobros",
                     "can"   : "m-cobros"
 
+                },{
+
+                    "route" : "itempercentage.crear",
+                    "url"   : "itempercentage/itempercentage-list",
+                    "name"  : "Lista de Rubros",
+                    "can"   : "m-rubros"
+
+                },
+                {
+
+                    "route" : "account.crear",
+                    "url"   : "account/account-list",
+                    "name"  : "Plan de Cuentas",
+                    "can"   : "m-cuentas"
+
                 }
             ]
 
@@ -62,9 +92,75 @@
             "url"  : "",
             "name" : "Ingreso de Facturas",
             "icon" : "grid",
-            "can"  : "usuarios",
+            "can"  : "m-procesos",
             "submenu" :[
-               
+                {
+
+                    "route" : "advances.crear",
+                    "url"   : "advances/advances-list",
+                    "name"  : "Anticipos y Prestamos",
+                    "can"   : "m-advances"
+
+                },
+                {
+
+                    "route" : "seat.crear",
+                    "url"   : "seat/seat-list",
+                    "name"  : "Asientos Contables",
+                    "can"   : "m-seat"
+
+                },
+                {
+
+                    "route" : "vouchers.crear",
+                    "url"   : "vouchers/vouchers-list",
+                    "name"  : "Ingreso Factura",
+                    "can"   : "p_voucher"
+
+                }
+
+            ]
+        },
+        {
+
+            "url"  : "#",
+            "name" : "Reportes",
+            "icon" : "file-text",
+            "can"  : "reportes",
+            "submenu" :[
+                
+                {
+
+                    "route" : "accountstatus.crear",
+                    "url"   : "accountstatus/accountstatus-list",
+                    "name"  : "Estado de Cuenta",
+                    "can"   : "m-accountstatus"
+
+                },
+                {
+
+                    "route" : "reportes.indexbalance",
+                    "url"   : "reportes/balance",
+                    "name"  : "Balance General",
+                    "can"   : "reportes"
+
+                },
+                {
+
+                    "route" : "reportes.indexresult",
+                    "url"   : "reportes/balanceresultado",
+                    "name"  : "Pérdidas y Ganancias",
+                    "can"   : "reportes"
+
+                },
+                {
+
+                    "route" : "reportes.indexconciliacion",
+                    "url"   : "reportes/conciliacion",
+                    "name"  : "Conciliación Bancaria",
+                    "can"   : "reportes"
+
+                }
 
             ]
         }

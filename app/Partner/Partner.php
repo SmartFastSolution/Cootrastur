@@ -29,6 +29,7 @@ class Partner extends Model
         'driver',
         'type_account',
         'status',
+        'code_account',
        ];
 
 

@@ -28,8 +28,8 @@
                     </div>
                     
                     <div class="col-xs-12 col-md-4 form-group">
-                        <label>identificacion</label>
-                        <input type="text" wire:model.defer="identification" class="form-control @error('identification') is-invalid @enderror" placeholder="Identificacion">
+                        <label>identificación</label>
+                        <input type="text" wire:model.defer="identification" class="form-control @error('identification') is-invalid @enderror" placeholder="Identificación">
                         @error('identification')
                             <p class="error-message text-danger font-weight-bold">{{ $message }}</p>
                         @enderror
@@ -130,8 +130,8 @@
                     </div>
                     
                     <div class="col-xs-12 col-md-4 form-group">
-                        <label>#Autorizacion</label>
-                        <input type="text" wire:model.defer="autorization" class="form-control @error('autorization') is-invalid @enderror" placeholder="Autorizacion">
+                        <label>#Autorización</label>
+                        <input type="text" wire:model.defer="autorization" class="form-control @error('autorization') is-invalid @enderror" placeholder="Autorización">
                         @error('autorization')
                             <p class="error-message text-danger font-weight-bold">{{ $message }}</p>
                         @enderror

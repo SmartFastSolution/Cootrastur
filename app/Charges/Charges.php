@@ -12,6 +12,9 @@ class Charges extends Model
         'description',
         'type_charges',
         'value',
+        'key_account',
+        'code_account',
+        'type_cobros',
        ];
 
 

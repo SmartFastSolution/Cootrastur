@@ -26,13 +26,14 @@
              <thead>
                  <tr>                    
                      <th class="px-4 py-2 text-center ">
-                        Descripcion
+                        Descripción
                          <a class="text-primary" wire:click.prevent="sortBy('nombre')" role="button">
 
                              @include('includes._sort-icon', ['field' => 'nombre'])
                          </a>
                      </th>
                      <th class="px-4 py-2 text-center">Tipo Cobro</th>
+                     <th class="px-4 py-2 text-center">Cuenta Contable</th>
                      <th class="px-4 py-2 text-center">Valor</th>
                      <th class="px-4 py-2 text-center">Estado</th>
                      <th class="px-4 py-2 text-center" colspan="2">Acción</th>
@@ -43,11 +44,14 @@
                      @foreach ($data as $p)
                          <tr>
                              <td class="text-center ">{{ $p->description }}</td>
+                             
                              @if($p->type_charges == "P")
                                 <td class="text-center ">Porcentaje</td>
-                                <td class="text-center ">{{ number_format($p->value, 0, '.', "") }}%</td>
+                                <td class="text-center ">{{ $p->code_account }}</td>
+                                <td class="text-center ">{{$p->value }}%</td>
                              @else
                                 <td class="text-center ">Valor</td>
+                                <td class="text-center ">{{ $p->code_account }}</td>
                                 <td class="text-center ">{{ $p->value }}</td>
                              @endif
                              <td class="text-center ">

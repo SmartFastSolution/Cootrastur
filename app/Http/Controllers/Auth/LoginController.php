@@ -50,13 +50,18 @@ class LoginController extends Controller
           $request->session()->invalidate();
           return redirect('/login')->withInput()->with('message', 'Tu cuenta esta desactivada, por favor comunicate con el administrador');
         }
-
+        
         $user->access_at = Carbon::now();
         $user->save();
-
-
         return redirect()->route('home');
+        
+        
+
+
+        
     }
+
+    
 
 
 

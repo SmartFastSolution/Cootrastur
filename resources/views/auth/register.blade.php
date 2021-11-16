@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-    <title>SOLUTIONFINANCETAX - Registro</title>
+    <title>COOTRA ESTUR LTDA. - Registro</title>
     <!-- General CSS Files -->
     <link rel="stylesheet" href=" {{ asset('aegis/source/light/assets/css/app.min.css') }}">
 
@@ -17,7 +17,7 @@
 
 
     <!-- Template CSS -->
-    <link rel='shortcut icon' type='image/x-icon' href="{{ asset('aegis/source/light/assets/img/icono.ico') }}">
+    <link rel='shortcut icon' type='image/x-icon' href="{{ asset('aegis/source/light/assets/img/Logot.png') }}">
 
 </head>
 
@@ -32,7 +32,7 @@
                         <div class="card card-info">
                             <div class="card-header">
 
-                                <img class="nav_logo_img img-fluid top-right" src="digital/images/logo1.png">
+                                <img class="nav_logo_img img-fluid top-right" src="digital/images/Logot.png">
 
                             </div>
                             <h4 class="text-center">REGISTRO</h4>
@@ -177,5 +177,10 @@
 </body>
 
 
-
+<style>
+    .nav_logo_img {
+      text-align: center;
+      margin:auto;
+    }
+  </style>
 </html>

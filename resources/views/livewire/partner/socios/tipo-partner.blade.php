@@ -27,8 +27,8 @@
          <table class="table table-striped">
              <thead>
                  <tr>
-                     <th class="px-4 py-2 text-center">Codigo </th>
-                     <th class="px-4 py-2 text-center">identificacion</th>
+                     <th class="px-4 py-2 text-center">Código </th>
+                     <th class="px-4 py-2 text-center">identificación</th>
                      <th class="px-4 py-2 text-center ">
                          Nombre
                          <a class="text-primary" wire:click.prevent="sortBy('nombre')" role="button">
@@ -36,7 +36,8 @@
                              @include('includes._sort-icon', ['field' => 'nombre'])
                          </a>
                      </th>
-                     <th class="px-4 py-2 text-center">Direccion</th>
+                     <th class="px-4 py-2 text-center">Dirección</th>
+                     <th class="px-4 py-2 text-center">Clave Cuenta</th>
                      <th class="px-4 py-2 text-center">Estado</th>
                      <th class="px-4 py-2 text-center" colspan="2">Acción</th>
                  </tr>
@@ -49,6 +50,7 @@
                              <td class="text-center ">{{ $p->identification }}</td>
                              <td class="text-center ">{{ $p->name_partner }}</td>
                              <td class="text-center ">{{ $p->address_partner }}</td>
+                             <td class="text-center ">{{ $p->code_account }}</td>
                              <td class="text-center ">
                               <span style="cursor: pointer;"
                                   wire:click.prevent="estadochange('{{ $p->id }}')"

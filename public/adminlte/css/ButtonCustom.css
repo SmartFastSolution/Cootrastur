@@ -1,0 +1,20 @@
+.btnCSS {
+  font-family:'Titillium Web'; 
+  display: inline-block;
+  padding: 7px 30px;
+  background: #229490;
+  border-radius: 50px;
+  color: #fff;
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+}
+
+.btnCSS:hover {
+color: white;
+  background-color: #3a484f;
+}
+.btnCSS:checked,.btnCSS:click,.btnCSS:active {
+  border: 2px solid #3a484f;
+}

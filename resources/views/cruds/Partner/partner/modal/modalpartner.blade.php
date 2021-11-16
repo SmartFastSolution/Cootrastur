@@ -37,8 +37,8 @@
                                             </div>
                                             
                                             <div class="col-xs-12 col-md-4 form-group">
-                                                <label>identificacion</label>
-                                                <input type="text" wire:model.defer="identification" class="form-control @error('identification') is-invalid @enderror" placeholder="Identificacion">
+                                                <label>identificación</label>
+                                                <input type="text" wire:model.defer="identification" class="form-control @error('identification') is-invalid @enderror" placeholder="Identificación">
                                                 @error('identification')
                                                     <p class="error-message text-danger font-weight-bold">{{ $message }}</p>
                                                 @enderror
@@ -152,7 +152,33 @@
                                                 @enderror
                                             </div>
                                         </div>
-                                        
+                                        <div class="row">
+                                            <div class="col-xs-12 col-md-4 form-group">
+                                                <label for="email" class="control-label">Código Cuenta Contable</label>
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <input type="text" wire:model.defer="code_account" class="form-control @error('code_account') is-invalid @enderror" id="code_account" onchange="buscarCuenta();">
+                                                        <span class="input-group-btn ">
+                                                            <button type="button" class="btn btn-info form-control" onclick="buscarCuenta();"><i class="fa fa-fw fa-search"></i></button>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-12 col-md-4 form-group">
+                                                <label>Descripción Cuenta Contable</label>
+                                                <input type="text" wire:model.defer="description_account" class="form-control @error('description_account') is-invalid @enderror" id="description_account" placeholder="" readonly>
+                                                @error('line')
+                                                    <p class="error-message text-danger font-weight-bold">{{ $message }}</p>
+                                                @enderror
+                                            </div>
+                                            <div class="col-xs-12 col-md-4 form-group">
+                                                <label>Linea</label>
+                                                <input type="text" wire:model.defer="line" class="form-control @error('line') is-invalid @enderror" placeholder="Linea">
+                                                @error('line')
+                                                    <p class="error-message text-danger font-weight-bold">{{ $message }}</p>
+                                                @enderror
+                                            </div>
+                                        </div>
                                         <div class="row">
                                             <div class="col-xs-12 col-md-4 form-group">
                                                 <label>Tipo Cuenta</label>
@@ -169,16 +195,8 @@
                                                     <p class="error-message text-danger font-weight-bold">{{ $message }}</p>
                                                 @enderror
                                             </div>
-
-                                            <div class="col-xs-12 col-md-4 form-group">
-                                                <label>Linea</label>
-                                                <input type="text" wire:model.defer="line" class="form-control @error('line') is-invalid @enderror" placeholder="Linea">
-                                                @error('line')
-                                                    <p class="error-message text-danger font-weight-bold">{{ $message }}</p>
-                                                @enderror
-                                            </div>
-                                            
                                         </div>
+                                        
                                         <div class="selectgroup selectgroup-pills">
                                             <span class="font-weight-bold text-dark" >Estado:</span>
                                             <label class="selectgroup-item">
@@ -226,7 +244,7 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-xs-12 col-md-4 form-group">
-                                                <label>Satelital</label>
+                                                <label>Satélital</label>
                                                 <input type="number" wire:model.defer="satellite" class="form-control @error('satellite') is-invalid @enderror" placeholder="0.00">
                                                 @error('satellite')
                                                     <p class="error-message text-danger font-weight-bold">{{ $message }}</p>
@@ -284,7 +302,7 @@
                                             </div>
 
                                             <div class="col-xs-12 col-md-4 form-group">
-                                                <label>Almacen</label>
+                                                <label>Almacén</label>
                                                 <input type="number" wire:model.defer="store" class="form-control @error('store') is-invalid @enderror" placeholder="0.00">
                                                 @error('store')
                                                     <p class="error-message text-danger font-weight-bold">{{ $message }}</p>
@@ -292,7 +310,7 @@
                                             </div>
 
                                             <div class="col-xs-12 col-md-4 form-group">
-                                                <label>Afilizacion</label>
+                                                <label>Afilización</label>
                                                 <input type="number" wire:model.defer="membership" class="form-control @error('membership') is-invalid @enderror" placeholder="0.00">
                                                 @error('membership')
                                                     <p class="error-message text-danger font-weight-bold">{{ $message }}</p>
@@ -327,6 +345,7 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer bg-whitesmoke br">
+                                    
                                     @if ($editMode)
                                         <button type="button" wire:click="updatePartner" class="btn btn-warning">Actualizar Socio</button>
                                     @else
@@ -341,3 +360,173 @@
             </div>
     </div>
 </div>
+
+<style>
+
+    .file { transition: all .2s ease-in-out; }
+    .file:hover { transform: scale(1.1);
+        cursor:pointer;}
+    
+    .tooltip .tooltip-inner {
+      background-color: #222d32;
+      color:white;
+    }
+    
+    .tooltip .arrow::before {
+      border-left-color: #222d32;
+        color:white;
+    }
+    
+    .btncustom{
+    
+        border-radius: 25px !important;
+        border: 1px solid black !important;
+    }
+        .custom{
+    
+            background-color: transparent;
+            border-style: none;
+        }
+    
+        .custom:focus, input:focus{
+        outline: none;
+        }
+        .modal-open {
+    overflow: scroll;
+}
+        </style>
+@section('js')
+    <script >
+function buscarCuenta() {
+    $.get('{!! route('partner.cuentas') !!}'+'?code='+$("#code_account").val(), function( datos ) {
+        if(datos =="" || datos== null){
+            iziToast.error({
+            title: 'Transporte',
+            message: "No existe cuenta con clave "+$("#code_account").val(),
+            position: 'topRight'
+        });
+        }else{
+            $("#description_account").val(datos)
+        }
+        
+    }).fail(function() {
+        iziToast.error({
+            title: 'Transporte',
+            message: "Error al buscar Cuenta Contable",
+            position: 'topRight'
+        });
+    });
+    
+} 
+
+var DATA = "";
+$("#my-awesome-dropzone1").dropzone({
+            maxFile:1,
+                 maxFilesize: 200,
+    addRemoveLinks:true,
+    acceptedFiles: ".xlsx,.xls,.csv",
+    autoProcessQueue:false,
+
+  init: function() {
+
+    this.on("addedfile", function(file) {
+      if (this.files[1]!=null){
+        this.removeFile(this.files[0]);
+      }
+
+        $(".dz-remove").html("Eliminar");
+        $('.dz-progress').hide();
+        var url ="{{ url('/imagenes/spreadsheet.png')}}";
+        $('.dz-image').css('background', 'url(' + url + ')');
+        $('.dz-image').css('background-size', '100% 100%');
+
+          var FR = new FileReader();
+               FR.onload = function(e) {
+                 var data = new Uint8Array(e.target.result);
+                 var workbook = XLSX.read(data, {type: 'array'});
+                 var firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                    var result =XLSX.utils.sheet_to_json(firstSheet, {header:[
+                        "CODIGO" ,
+                        "IDENTIFICACION" ,
+                        "NOMBRES" ,
+                        "DIRECCION",
+                        "FECHA NACIMIENTO",
+                        "CORREO",
+                        "TELEFONO 1",
+                        "TELEFONO 2",
+                        "CUENTA CONTABLE",
+                        "FECHA REGISTRO",
+                        "PLACA",
+                        "CHASIS",
+                        "MOTOR",
+                        "CHOFER",
+                        "AÑO VEHICULO",
+                        "BANCO",
+                        "TIPO CUENTA",
+                        "NUMERO CUENTA",
+                        "LINEA",
+                        "TIPO VEHICULO",
+                        "CUOTA AD.",
+                        "SEGURO VEH.",
+                        "SATELITAL",
+                        "PTMO.",
+                        "AHORRO",
+                        "OTROS",
+                        "IESS",
+                        "GRAJE",
+                        "LIMPIEZA",
+                        "MULTA",
+                        "SEGURO INTERNO",
+                        "ALMACEN",
+                        "AFILIACION",
+                        "SENSOR",
+                        
+                        ],raw: true, defval:null,range:1});
+                         DATA=result;
+                         console.log(result);
+                                        };
+              FR.readAsArrayBuffer(file);
+                });
+  }
+});
+function ocultarmodal(){
+    
+    $.get('{!! route('partner.import') !!}',{
+            json:DATA,
+            _token:'{{csrf_token()}}'
+
+        },function(data) {
+            if(data == "OK"){
+                $('#loader1').modal('show');
+                $("#ImportarSocios").modal('hide');
+               
+                iziToast.success({
+                        title: 'Transporte',
+                        message: "Socio importados Correctamente",
+                        position: 'topRight'
+                    });
+                setTimeout(function(){
+                            window.location.reload(1);
+                    }, 5000);
+            }else{
+                    iziToast.error({
+                        title: 'Transporte',
+                        message: data,
+                        position: 'topRight'
+                    });
+
+            }
+            
+           
+        }).fail(function() {
+            iziToast.error({
+                        title: 'Transporte',
+                        message: "Error al importar Socios",
+                        position: 'topRight'
+                    });
+      });
+    
+}
+
+</script>
+@endsection
