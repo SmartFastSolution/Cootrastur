@@ -1,11 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\VoucherCheck;
+namespace App\Http\Controllers\RecibeComp;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ServiceRequest;
-use App\Servicios\Service;
-use App\Servicios\Tiposervicio;
 use App\Traits\ServiceTrait;
 use Illuminate\Http\Request;
 use Livewire\Component;
@@ -15,7 +13,7 @@ use DB;
 use Carbon\Carbon;
 use Auth;
 
-class VoucherCheckController extends Controller
+class CompRecibeController extends Controller
 {
 
     use ServiceTrait;
@@ -26,7 +24,7 @@ class VoucherCheckController extends Controller
     }
         // redireccion de tipo de planes vista 
     public function Voucherlist(){
-        return view('cruds.vouchers.facturas.index');
+        return view('cruds.recibocomp.recibosocio.index');
     }
    
 
@@ -127,17 +125,11 @@ class VoucherCheckController extends Controller
         return $resultado;
     }
 
-    public function guardarFactura(Request $request){
+    public function guardarRecibo(Request $request){
         $id_bank = $request->code_account;
         $numero_factura = $request->number_voucher;
         $fecha_registro = $request->date_registre;
-        $tipo_documento = $request->tipo_documento;
-        $fecha_cheque = $request->date_check;
         $proveedor = $request->id_proveedor;
-        $numero_cheque = $request->number_check;
-
-        $numero_cheque_factura = $request->number_cheque;
-        $numero_autorizacion = $request->number_autorization;
 
         $total = $request->total_value;
         $referencia = $request->header_description;
@@ -149,19 +141,14 @@ class VoucherCheckController extends Controller
             $numeroVoucher =$seq->id_compro;
             DB::table('voucher_header')->insert([
                 'id_bank' =>  $id_bank,
-                'number_voucher' => $numeroVoucher,
+                'number_voucher'=>$numeroVoucher,
                 'date_registre' => Carbon::parse($fecha_registro),
-                'date_check' => Carbon::parse($fecha_cheque),
                 'id_proveedor' => $proveedor,
-                'number_check' => $numero_cheque,
                 'total_value' =>  $total,
                 'detail_voucher' => $referencia,
-                'type_document'=>$tipo_documento,
                 'date_voucher' => Carbon::now(),
                 'status' => "BORRADOR",
-                'number_check_voucher' => $numero_cheque_factura,
-                'number_autorization' => $numero_autorizacion,
-
+                'type_document_recibe' => "R",
             ]);
     
             $idheader = DB::getPdo()->lastInsertId();
@@ -198,15 +185,8 @@ class VoucherCheckController extends Controller
 
     public function actualizarVoucher(Request $request){
         $id_bank = $request->code_account;
-        $numero_factura = $request->number_voucher;
         $fecha_registro = $request->date_registre;
-
-        $numero_cheque_factura = $request->number_cheque;
-        $numero_autorizacion = $request->number_autorization;
-
-        $fecha_cheque = $request->date_check;
         $proveedor = $request->id_proveedor;
-        $numero_cheque = $request->number_check;
         $tipo_documento = $request->tipo_documento;
         $total = $request->total_value;
         $referencia = $request->header_description;
@@ -221,13 +201,8 @@ class VoucherCheckController extends Controller
                 'id_bank'=> $id_bank,
                 'detail_voucher' => $referencia,
                 'date_registre' =>Carbon::parse($fecha_registro)->toDateTimeString(),
-                'date_check' =>Carbon::parse($fecha_cheque),
                 'id_proveedor' =>$proveedor,
-                'number_check' =>$numero_cheque,
                 'total_value' =>$total,
-                'type_document'=>$tipo_documento,
-                'number_check_voucher' => $numero_cheque_factura,
-                'number_autorization' => $numero_autorizacion,
             ]);
             if($detalle == null || $detalle == ''){
     
@@ -256,40 +231,6 @@ class VoucherCheckController extends Controller
         } 
         //return $detalle;
     }
-    
-    public function consultaSocios(Request $request){
-        $identificacion = $request->identification;
-        $result1 = DB::table('partner')
-                ->select('id','identification','name_partner')
-                ->where('status', 'activo')
-                ->where('identification',$identificacion)
-                ->orderby('name_partner','ASC')->get();
-        return $result1;
-    }
-
-    public function descargarPDF(Request $request){
-        $comprobante = $request->comp;
-        $fecha = Carbon::now();
-        $usuario = Auth::user()->name;
-        $cabecera = DB::table('voucher_header')->where('id', $comprobante)->first();
-        if (isset($cabecera)) {
-            $banco = DB::table('bank')->where('id',$cabecera->id_bank)->first();
-            $datosSocio = DB::table('partner')->where('id', $cabecera->id_proveedor)->first();
-            //$valorCheque = DB::table('voucher_detail')->where('id_vheader', $comprobante)->where('key_account',$datosSocio->key_account)->first();
-            $detalle = DB::table('voucher_detail')
-                        ->select('voucher_detail.key_account', 'voucher_detail.code_account','account_plan.description', 'voucher_detail.value_debito', 'voucher_detail.value_credito')
-                        ->join('account_plan', 'account_plan.code_account', '=', 'voucher_detail.code_account') 
-                        ->where('id_vheader', $comprobante)->get();
-            $total_debito=DB::table('voucher_detail')->select(DB::raw("SUM(value_debito) as debito"))->where('id_vheader', $comprobante)->first();
-            $total_crebito=DB::table('voucher_detail')->select(DB::raw("SUM(value_credito) as credito"))->where('id_vheader', $comprobante)->first();
-            $view = \View::make('Reportes.reporteIngresos',compact(['datosSocio','detalle','total_debito','total_crebito','cabecera','fecha','usuario','banco']))->render();
-            $pdf = \App::make('dompdf.wrapper');
-            $pdf->loadHTML($view);
-            return $pdf->stream("Comprobante ".$cabecera->number_voucher.'.pdf');
-            //return $pdf->download("Comprobante ".$cabecera->number_voucher.'.pdf');
-        }
-    }
-
     public function CuentasProveedor(Request $request){
         $idProveedor = $request->code;
         $fechaDia = Carbon::now()->format('Y/m/d');
@@ -413,6 +354,38 @@ class VoucherCheckController extends Controller
 
         
     }
+    public function consultaSocios(Request $request){
+        $identificacion = $request->identification;
+        $result1 = DB::table('partner')
+                ->select('id','identification','name_partner')
+                ->where('status', 'activo')
+                ->where('identification',$identificacion)
+                ->orderby('name_partner','ASC')->get();
+        return $result1;
+    }
+
+    public function descargarPDF(Request $request){
+        $comprobante = $request->comp;
+        $fecha = Carbon::now();
+        $usuario = Auth::user()->name;
+        $cabecera = DB::table('voucher_header')->where('id', $comprobante)->first();
+        if (isset($cabecera)) {
+            $banco = DB::table('bank')->where('id',$cabecera->id_bank)->first();
+            $datosSocio = DB::table('partner')->where('id', $cabecera->id_proveedor)->first();
+            //$valorCheque = DB::table('voucher_detail')->where('id_vheader', $comprobante)->where('key_account',$datosSocio->key_account)->first();
+            $detalle = DB::table('voucher_detail')
+                        ->select('voucher_detail.key_account', 'voucher_detail.code_account','account_plan.description', 'voucher_detail.value_debito', 'voucher_detail.value_credito')
+                        ->join('account_plan', 'account_plan.code_account', '=', 'voucher_detail.code_account') 
+                        ->where('id_vheader', $comprobante)->get();
+            $total_debito=DB::table('voucher_detail')->select(DB::raw("SUM(value_debito) as debito"))->where('id_vheader', $comprobante)->first();
+            $total_crebito=DB::table('voucher_detail')->select(DB::raw("SUM(value_credito) as credito"))->where('id_vheader', $comprobante)->first();
+            $view = \View::make('Reportes.reporteIngresos',compact(['datosSocio','detalle','total_debito','total_crebito','cabecera','fecha','usuario','banco']))->render();
+            $pdf = \App::make('dompdf.wrapper');
+            $pdf->loadHTML($view);
+            return $pdf->stream("Comprobante ".$cabecera->number_voucher.'.pdf');
+            //return $pdf->download("Comprobante ".$cabecera->number_voucher.'.pdf');
+        }
+    }
 
     public function EliminarFactura(Request $request){
         
@@ -449,93 +422,6 @@ class VoucherCheckController extends Controller
                         }
                     }
                     
-                    
-                    /*$descuentoDisminuir = DB::table('configuration_discount')->where('code_account',$d->code_account)->where('key_account',$d->key_account)->where('id_partner',$estado->id_proveedor)->first();
-                    if(isset($descuentoDisminuir)) {
-                           // $configs = include('../config/config.php');
-                            $socio = DB::table('voucher_header')->where('id',$id)->first();
-                            $reducirSocio = DB::table('partner_aditional')->where('id_partner',$socio->id_proveedor)->first();
-                            /////////////////////BUSCAR EL CAMPO AL QUE TENGO QUE RESTAR /////////////////////////
-                            if($descuentoDisminuir->code_discount == "1"){
-                                $otrosDescuentos = $reducirSocio->payment_aditional;
-                                $nuevoValor = number_format($otrosDescuentos + $d->value_credito , 2, '.', "");
-                                DB::table('partner_aditional')->where('id_partner',$socio->id_proveedor)->update([
-                                    'payment_aditional' => $nuevoValor
-                                ]);
-                            }else if($descuentoDisminuir->code_discount == "2"){
-                                $otrosDescuentos = $reducirSocio->safe_vehicule;
-                                $nuevoValor = number_format($otrosDescuentos + $d->value_credito , 2, '.', "");
-                                DB::table('partner_aditional')->where('id_partner',$socio->id_proveedor)->update([
-                                    'safe_vehicule' => $nuevoValor
-                                ]);
-                            }else if($descuentoDisminuir->code_discount == "3"){
-                                $otrosDescuentos = $reducirSocio->satellite;
-                                $nuevoValor = number_format($otrosDescuentos + $d->value_credito , 2, '.', "");
-                                DB::table('partner_aditional')->where('id_partner',$socio->id_proveedor)->update([
-                                    'satellite' => $nuevoValor
-                                ]);
-                            }else if($descuentoDisminuir->code_discount == "5"){
-                                $otrosDescuentos = $reducirSocio->saving;
-                                $nuevoValor = number_format($otrosDescuentos + $d->value_credito , 2, '.', "");
-                                DB::table('partner_aditional')->where('id_partner',$socio->id_proveedor)->update([
-                                    'saving' => $nuevoValor
-                                ]);
-                            }else if($descuentoDisminuir->code_discount == "6"){
-                                $otrosDescuentos = $reducirSocio->other;
-                                $nuevoValor = number_format($otrosDescuentos + $d->value_credito , 2, '.', "");
-                                DB::table('partner_aditional')->where('id_partner',$socio->id_proveedor)->update([
-                                    'other' => $nuevoValor
-                                ]);
-                            }else if($descuentoDisminuir->code_discount == "7"){
-                                $otrosDescuentos = $reducirSocio->iess;
-                                $nuevoValor = number_format($otrosDescuentos + $d->value_credito , 2, '.', "");
-                                DB::table('partner_aditional')->where('id_partner',$socio->id_proveedor)->update([
-                                    'iess' => $nuevoValor
-                                ]);
-                            }else if($descuentoDisminuir->code_discount == "8"){
-                                $otrosDescuentos = $reducirSocio->garage;
-                                $nuevoValor = number_format($otrosDescuentos + $d->value_credito , 2, '.', "");
-                                DB::table('partner_aditional')->where('id_partner',$socio->id_proveedor)->update([
-                                    'garage' => $nuevoValor
-                                ]);
-                            }else if($descuentoDisminuir->code_discount == "9"){
-                                $otrosDescuentos = $reducirSocio->cleaning;
-                                $nuevoValor = number_format($otrosDescuentos + $d->value_credito , 2, '.', "");
-                                DB::table('partner_aditional')->where('id_partner',$socio->id_proveedor)->update([
-                                    'cleaning' => $nuevoValor
-                                ]);
-                            }else if($descuentoDisminuir->code_discount == "10"){
-                                $otrosDescuentos = $reducirSocio->penalty_fee;
-                                $nuevoValor = number_format($otrosDescuentos + $d->value_credito, 2, '.', "");
-                                DB::table('partner_aditional')->where('id_partner',$socio->id_proveedor)->update([
-                                    'penalty_fee' => $nuevoValor
-                                ]);
-                            }else if($descuentoDisminuir->code_discount == "11"){
-                                $otrosDescuentos = $reducirSocio->safe_internal;
-                                $nuevoValor = number_format($otrosDescuentos + $d->value_credito, 2, '.', "");
-                                DB::table('partner_aditional')->where('id_partner',$socio->id_proveedor)->update([
-                                    'safe_internal' => $nuevoValor
-                                ]);
-                            }else if($descuentoDisminuir->code_discount == "12"){
-                                $otrosDescuentos = $reducirSocio->store;
-                                $nuevoValor = number_format($otrosDescuentos + $d->value_credito, 2, '.', "");
-                                DB::table('partner_aditional')->where('id_partner',$socio->id_proveedor)->update([
-                                    'store' => $nuevoValor
-                                ]);
-                            }else if($descuentoDisminuir->code_discount == "13"){
-                                $otrosDescuentos = $reducirSocio->membership;
-                                $nuevoValor = number_format($otrosDescuentos + $d->value_credito , 2, '.', "");
-                                DB::table('partner_aditional')->where('id_partner',$socio->id_proveedor)->update([
-                                    'membership' => $nuevoValor
-                                ]);
-                            }else if($descuentoDisminuir->code_discount == "4"){
-                                $otrosDescuentos = $reducirSocio->ptmo;
-                                $nuevoValor = number_format($otrosDescuentos + $d->value_credito , 2, '.', "");
-                                DB::table('partner_aditional')->where('id_partner',$socio->id_proveedor)->update([
-                                    'ptmo' => $nuevoValor
-                                ]);
-                            }
-                    }*/
                     $prestamosDisminuir = DB::table('advances_loan')->where('code_account',$d->code_account)->where('key_account',$d->key_account)->where('id_partner',$estado->id_proveedor)->where('status','Aprobado')->first();
                     if(isset($prestamosDisminuir)) {
                         if($prestamosDisminuir->type_prestamo == "P"){

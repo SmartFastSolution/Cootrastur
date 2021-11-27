@@ -11,6 +11,7 @@ Route::prefix('seat')->group(function(){
               Route::get('saveseat', ['uses' => 'AccountPlan\JourmalEntryController@guardarAsiento', 'as' => 'account.saveseat']);
               Route::get('detalleasiento', ['uses' => 'AccountPlan\JourmalEntryController@buscarDetalle', 'as' => 'account.buscardetalle']);
               Route::get('actualizarasiento', ['uses' => 'AccountPlan\JourmalEntryController@actualizarAsiento', 'as' => 'account.updateseat']);
+              Route::get('pdfasientos', ['uses' => 'AccountPlan\JourmalEntryController@descargarPDF', 'as' => 'account.asientopdf']);
 
               Route::get('eliminarasiento', ['uses' => 'AccountPlan\JourmalEntryController@EliminarAsiento', 'as' => 'account.deleteseat']);
               Route::get('aprobarasiento', ['uses' => 'AccountPlan\JourmalEntryController@AprobarAsiento', 'as' => 'account.aprobarseat']);

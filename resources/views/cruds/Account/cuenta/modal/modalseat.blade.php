@@ -319,10 +319,10 @@ function calculonuevo() {
                             position: 'topRight'
                         });
                     }else{
-                        $('#createAsiento').modal('hide');
+                        //$('#createAsiento').modal('hide');
                    
                         
-                        $('#loader1').modal('show');
+                        //$('#loader1').modal('show');
                         $.get('{!! route('account.listacuentas') !!}'+'?code='+$("#codigo_cuenta").val(), function( datos ) {
                             var rowCount =document.getElementById("tablasientos").rows.length;
                             if(datos.length == 0){
@@ -355,13 +355,17 @@ function calculonuevo() {
                             }
                                 $("#codigo_cuenta").val("");
                                 
-                                $('#loader1').modal('hide');
-                                $('#createAsiento').modal('show');
+                                //$('#loader1').modal('hide');
+                                //$('#createAsiento').modal('show');
                             
                         }).fail(function() {
-                            
-                            $('#loader1').modal('hide');
-                            $('#createAsiento').modal('show');
+                            iziToast.error({
+                                title: 'Transporte',
+                                message: "Error al buscar cuenta",
+                                position: 'topRight'
+                            });
+                            //$('#loader1').modal('hide');
+                            //$('#createAsiento').modal('show');
                         });
                         
                     }
@@ -690,5 +694,13 @@ function EliminarAsiento(id) {
         });
                 
     } 
+
+    function mensajepdf(){
+    iziToast.success({
+        title: 'Transporte',
+        message: "Descargando PDF Espere...",
+        position: 'topRight'
+    });
+}
     </script>
 @endsection

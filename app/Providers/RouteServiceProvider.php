@@ -78,6 +78,7 @@ class RouteServiceProvider extends ServiceProvider
                require base_path('routes/web/estado.php');
                require base_path('routes/web/cobrosconfig.php');
                require base_path('routes/web/parametroscontables.php');
+               require base_path('routes/web/comprobantesrecibosocio.php');
              });
     }
 

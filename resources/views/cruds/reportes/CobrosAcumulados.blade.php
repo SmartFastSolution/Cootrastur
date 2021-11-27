@@ -2,7 +2,7 @@
 
 @section('content')
 
-<h1 class="text-center font-weight-bold">Conciliación Bancaria </h1>
+<h1 class="text-center font-weight-bold">Cobros Acumulados Socios</h1>
 <br>
 <div>
      <div class="card">
@@ -17,15 +17,15 @@
                     <label>Fecha Final:</label> 
                     <input class="form-control" type="date"id="fechafin" onchange="descargaReporte();">
                 </div>
-                
                 <div class="col-xs-12 col-md-3 form-group">
-                    <label>Banco</label>
-                    <select  wire:model.defer="id_bank" class="form-control @error('id_bank') is-invalid @enderror" onchange="descargaReporte();" id="id_bank">
+                    <label>Socios</label>
+                    <select  wire:model.defer="id_partner" class="form-control @error('id_partner') is-invalid @enderror" onchange="descargaReporte();" id="id_partner">
+                        <option value="ALL">TODOS</option>
                         <?php foreach($bancos as $bank): ?>                
-                            <option value="<?php echo $bank->code_account ?>"><?php echo $bank->description ?></option>
+                            <option value="<?php echo $bank->id ?>"><?php echo $bank->name_partner ?></option>
                         <?php endforeach; ?>
                     </select>
-                        @error('typeid_bank_cobros')
+                        @error('id_partner')
                         <p class="error-message text-danger font-weight-bold">{{ $message }}</p>
                     @enderror
                 </div>
@@ -54,7 +54,7 @@ function mensaje(){
 }
 
     function descargaReporte() {
-        $('#descargaexcel a').prop('href', '{!!  route('reportes.verconciliacion') !!}?fechaini='+$("#fechaini").val()+'&fechafin='+$("#fechafin").val()+'&banco='+$("#id_bank").val());
+        $('#descargaexcel a').prop('href', '{!!  route('reportes.vercobrosa') !!}?fechaini='+$("#fechaini").val()+'&fechafin='+$("#fechafin").val()+'&partner='+$("#id_partner").val());
     }
 
 </script>

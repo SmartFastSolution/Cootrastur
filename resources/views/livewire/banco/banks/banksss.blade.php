@@ -32,6 +32,7 @@
                              @include('includes._sort-icon', ['field' => 'nombre'])
                          </a>
                      </th>
+                     <th class="px-4 py-2 text-center">Codigó Cuenta</th>
                      <th class="px-4 py-2 text-center">Estado</th>
                      <th class="px-4 py-2 text-center" colspan="2">Acción</th>
                  </tr>
@@ -41,6 +42,7 @@
                      @foreach ($data as $p)
                          <tr>
                              <td class="text-center ">{{ $p->description }}</td>
+                             <td class="text-center ">{{ $p->code_account }}</td>
                              <td class="text-center ">
                               <span style="cursor: pointer;"
                                   wire:click.prevent="estadochange('{{ $p->id }}')"

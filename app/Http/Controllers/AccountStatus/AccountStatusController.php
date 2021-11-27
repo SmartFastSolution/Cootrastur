@@ -40,7 +40,7 @@ class AccountStatusController extends Controller
         $fecha_ini = $request->fecha1;
         $fecha_fin = $request->fecha2;
         $pagos = [];
-        $datafactura = DB::table('voucher_header')->whereBetween('date_voucher',[$fecha_ini,$fecha_fin])->where('status','APROBADO')->where('id_proveedor',$idSocio)->get();
+        $datafactura = DB::table('voucher_header')->whereBetween('date_registre',[$fecha_ini,$fecha_fin])->where('status','APROBADO')->where('id_proveedor',$idSocio)->get();
         $result = $datafactura->toArray();
         foreach ($result as $cabecera){
             $detalle = DB::table('voucher_detail')->where('id_vheader', $cabecera->id)->get();
@@ -89,7 +89,6 @@ class AccountStatusController extends Controller
                         }
 
                     }
-                    
                 }
                 /*$cuentasmulta = DB::table('configuration_discount')->where('key_account', $detallepagos->key_account)->where('code_account', $detallepagos->code_account)->where('status',"activo")->where('code_discount',"10")->first();
                 if(isset($cuentasmulta)){
@@ -126,7 +125,6 @@ class AccountStatusController extends Controller
                 if($flag == "Y"){
                     $varias = number_format($varias + $detallepagos->value_credito , 2, '.', "");
                 }
-
             }
             $pagos[]=[
                 'comprobante' => $cabecera->number_voucher,
@@ -151,7 +149,6 @@ class AccountStatusController extends Controller
             ];
         }
         $dataPendiente = DB::table('partner_aditional_detail')->select('number_voucher','date_registre')->whereBetween('date_registre',[$fecha_ini,$fecha_fin])->where('status','PENDIENTE')->where('id_partner',$idSocio)->groupBy('number_voucher','date_registre')->get();
-        //return $dataPendiente;
         $resultDeudas = $dataPendiente->toArray();
         
         $aux = 1;
@@ -159,10 +156,8 @@ class AccountStatusController extends Controller
         $separarFecha2 = explode("/",Carbon::parse($fecha_fin)->format('Y/m/d'));
         $mesVlidacion = (int)$separarFecha[1];
         $totalDeudaAuto= count($dataPendiente);
-        //return $dataPendiente;
         
         foreach ($resultDeudas as $deudas){
-            
             $cuotaAd = 0;
             $certificado = 0;
             $dolar = 0;
@@ -175,12 +170,13 @@ class AccountStatusController extends Controller
             $multas = 0;
             $cuotaIng = 0;
             $puntoEmi = 0;
+            $prestamo = 0;
+            $anticipo = 0;
             $dataPendientetotal = DB::table('partner_aditional_detail')->whereBetween('date_registre',[$fecha_ini,$fecha_fin])->where('status','PENDIENTE')->where('id_partner',$idSocio)->where('number_voucher',$deudas->number_voucher)->get();
             $resultDeudas1 = $dataPendientetotal->toArray();
             foreach ($resultDeudas1 as $deudas1){
                 $cuentasmulta = DB::table('configuration_discount')->where('key_account', $deudas1->key_account)->where('code_account', $deudas1->code_account)->where('status',"activo")->where('code_discount',"10")->first();
                 $cuentasmulta1 = DB::table('configuration_discount')->where('key_account', $deudas1->key_account)->where('code_account', $deudas1->code_account)->where('status',"activo")->where('code_discount',"4")->first();
-                
                 if($deudas1->code_discount == "1"){
                     $cuotaAd = $deudas1->value_pending;
                 }else if($deudas1->code_discount == "2"){
@@ -196,11 +192,11 @@ class AccountStatusController extends Controller
                 }else if($deudas1->code_discount == "7"){
                     $cuotaIng = $deudas1->value_pending;
                 }else if($deudas1->code_discount == "8"){
-                    $multa = $detallepagos->value_credito;
+                    $multa =  $deudas1->value_pending;
                 }else if($deudas1->code_discount == "9"){
-                    $puntoEmi = $detallepagos->value_credito;
+                    $puntoEmi = $deudas1->value_pending;
                 }else if($deudas1->code_discount == "10"){
-                    $gestionCobran = $detallepagos->value_credito;
+                    $gestionCobran =  $deudas1->value_pending;
                 }else{
                     $varias = $varias + $deudas1->value_pending;
                 }
@@ -230,7 +226,6 @@ class AccountStatusController extends Controller
         $cuentasCobro = DB::table('advances_loan')->where('id_partner',$idSocio)->where('status','Aprobado')->where('value_pending','!=',0)->get();
         if(isset($cuentasCobro)){
             $index = 1;
-            
             foreach ($cuentasCobro as $deudasPrestamo){
                 $cuentasDetalle = DB::table('detail_advance_loan')->where('id_advances_loan',$deudasPrestamo->id)->where('status','PENDIENTE')->whereBetween('date_payment',[$fecha_ini,$fecha_fin])->get();
                 if(isset($cuentasCobro)){
@@ -264,13 +259,9 @@ class AccountStatusController extends Controller
                         ]; 
                     }
                 }
-                
                 $index++;
             }
-            //return $pagos;
         }
         return $pagos; 
     }
-
-
 }

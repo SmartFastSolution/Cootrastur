@@ -194,7 +194,7 @@ footer {
 			</div>
 			<div class="stl_05 stl_06">
 				<div class="stl_01" style="top: 3.605em; left:28em;"><span class="stl_07 stl_08" style="font-weight:bold; word-spacing:0.07em;text-decoration: underline;"> COOTRA ESTUR LTDA.</div>
-				<div class="stl_01" style="top: 5em; left:25em;"><span class="stl_07 stl_08" style="font-weight:bold; word-spacing:0.05em;text-decoration: underline;">CDLA. La Saiba Mz H V. 10 </span></div>
+				<div class="stl_01" style="top: 5em; left:25em;"><span class="stl_07 stl_08" style="font-weight:bold; word-spacing:0.05em;text-decoration: underline;">CIUDADELA COVIEM MZ 30 SL 30 </span></div>
 				<div class="stl_01" style="top: 6.5976em; left:28.5775em;"><span class="stl_10 stl_11" style="font-weight:bold; word-spacing:0.07em;"></span><span class="stl_07 stl_08" style="font-weight:bold; word-spacing:0.45em;  text-decoration: underline;"> RUC: 0992116927001</span></div>
 				
 				<table 	style="margin-top: 18em;padding-left: 1em;width:90%;border-bottom:1px solid black;border-top:1px solid black;background-color:white;">
@@ -203,68 +203,42 @@ footer {
 				        <td><span class="stl_10" style="color:black;">{{$fecha}}</span></td>
 					    <td><span class="stl_10" style="font-weight:bold;color:black;">Usuario: </span></td>
 				        <td><span class="stl_10" style="color:black;width:50px;" >{{$usuario}}</span></td>
-						<td><span class="stl_10" style="font-weight:bold;color:black;">Numero Comprobante: </span></td>
-				        <td><span class="stl_10" style="color:black;">{{$cabecera->number_voucher}}</span></td>
+						<td><span class="stl_10" style="font-weight:bold;color:black;">Tipo: </span></td>
+				        <td><span class="stl_10" style="color:black;width:50px;" >{{$descripcion}}</span></td>
 					</tr>
-					<tr>
-						<td><span class="stl_10" style="font-weight:bold;color:black;">Fecha Comprobante: </span></td>
-					   <td><span class="stl_10" style="color:black;">{{$cabecera->date_registre}}</span></td>
-					   <td><span class="stl_10" style="font-weight:bold;color:black;">Cta: </span></td>
-					   <td><span class="stl_10" style="color:black;width:50px;" >{{$banco->description}}</span></td>
-					   
-				   	</tr>
-					@if($cabecera->type_document_recibe != "R")
-				   	<tr>
-						<td><span class="stl_10" style="font-weight:bold;color:black;">Tipo Documento: </span></td>
-						@if($cabecera->type_document == "C")
-							<td><span class="stl_10" style="color:black;">CHEQUE</span></td>
-						@else
-							<td><span class="stl_10" style="color:black;">FACTURA</span></td>
-						@endif
-						<td><span class="stl_10" style="font-weight:bold;color:black;">Fecha Documento: </span></td>
-				   		<td><span class="stl_10" style="color:black;">{{$cabecera->date_check}}</span></td>
-				   		<td><span class="stl_10" style="font-weight:bold;color:black;">Numero Documento: </span></td>
-				   		<td><span class="stl_10" style="color:black;width:50px;" >{{$cabecera->number_check}}</span></td>
-			   		</tr>
-					@endif
-					<tr>
-						<td><span class="stl_10" style="font-weight:bold;color:black;">Valor: </span></td>
-					   	<td><span class="stl_10" style="color:black;width:50px;" >{{$cabecera->total_value*-1}}</span></td>
-						<td><span class="stl_10" style="font-weight:bold;color:black;">Identificación: </span></td>
-						<td><span class="stl_10" style="color:black;">{{$datosSocio->identification}}</span></td>
-						<td><span class="stl_10" style="font-weight:bold;color:black;">Beneficiario: </span></td>
-				   		<td><span class="stl_10" style="color:black;">{{$datosSocio->name_partner}}</span></td>
-			   		</tr>
-					<tr>
-						<td><span class="stl_10" style="font-weight:bold;color:black;">Detalle: </span></td>
-						<td><span class="stl_10" style="color:black;">{{$cabecera->detail_voucher}}</span></td>
-			   		</tr>
 
+					<tr>
+						<td><span class="stl_10" style="font-weight:bold;color:black;">Socio: </span></td>
+					   <td><span class="stl_10" style="color:black;">{{$datosSocio->name_partner}}</span></td>
+					   <td><span class="stl_10" style="font-weight:bold;color:black;">Monto: </span></td>
+					   <td><span class="stl_10" style="color:black;width:50px;" >{{$cabecera->value_total}}</span></td>
+					   <td><span class="stl_10" style="font-weight:bold;color:black;">Diferido: </span></td>
+					   <td><span class="stl_10" style="color:black;width:50px;" >{{($cabecera->months == 1 ? $cabecera->months." Mes" : $cabecera->months." Meses" )}}</span></td>
+				   </tr>
                 </table>
 
 				<table style="margin-top: 1.5142em; width:90%; text-align:center;border-bottom:1px solid black;">
 					<tr style="background-color:#bbcf03" >
-						<td><span class="stl_101" style="font-weight:bold;color:black">Clave Cuenta.</span></td>
-						<td><span class="stl_101" style="font-weight:bold;color:black">Código Cuenta</span></td>
-						<td  style="text-align:center;"><span class="stl_101" style="font-weight:bold;color:black">Descripción</span></td>
-						<td><span class="stl_101" style="font-weight:bold;color:black">Débito</span></td>
-						<td ><span class="stl_101" style="font-weight:bold;color:black">Crédito</span></td>
+						<td><span class="stl_101" style="font-weight:bold;color:black">Cuota Pago</span></td>
+						<td><span class="stl_101" style="font-weight:bold;color:black">Fecha Pago</span></td>
+						<td><span class="stl_101" style="font-weight:bold;color:black">Estado</span></td>
+						<td><span class="stl_101" style="font-weight:bold;color:black">Valor</span></td>
+						<td><span class="stl_101" style="font-weight:bold;color:black">Interes</span></td>
+						
 					</tr>
-				
-				@foreach ($detalle as $comp)
-				<tr>
-					<td style="text-align:right;"><span class="stl_10 ">	{{ $comp->key_account }} 	</span></td>
-					<td style="text-align:left;"><span class="stl_10" >{{ $comp->code_account }}</span></td>
-					<td style="text-align:center;"><span class="stl_12 stl_08" >{{ $comp->description }}</span></td>
-					<td style="text-align:right;"><span class="stl_10" > {{ $comp->value_debito }}</span></td>
-					<td style="text-align:right;"><span class="stl_10" >{{ $comp->value_credito }}</span></td>
-				@endforeach
-
-				
+					@foreach ($detalle as $comp)
+						<tr>
+							<td style="text-align:center;"><span class="stl_10 ">	{{ $comp->month_payment }} 	</span></td>
+							<td style="text-align:center;"><span class="stl_10" >{{ $comp->date_payment }}</span></td>
+							<td style="text-align:center;"><span class="stl_10" > {{ $comp->status }}</span></td>
+							<td style="text-align:right;"><span class="stl_12 stl_08" >{{ $comp->value_unit }}</span></td>
+							<td style="text-align:right;"><span class="stl_12 stl_08" >{{ $comp->value_interes }}</span></td>
+							
+					@endforeach
 					<tr >
 						 <th colspan="3" style="text-align: right;padding: 8px  8px;" ><span class="stl_10 ">TOTAL</span></th>
-						 <th style="text-align: right;padding-left: 1em;"><span class="stl_10 ">{{$total_debito->debito}}</span></th>
-						 <th style="text-align: right;padding-left: 1em;"><span class="stl_10 ">{{$total_crebito->credito}}</span></th>
+						 <th style="text-align: right;padding-left: 1em;"><span class="stl_10 ">{{number_format($totalDeuda->debito, 2, '.', "")}}</span></th>
+						 <th style="text-align: right;padding-left: 1em;"><span class="stl_10 ">{{number_format($TotalInteres->credito, 2, '.', "")}}</span></th>
 					 </tr>
 				 
 				 </table>

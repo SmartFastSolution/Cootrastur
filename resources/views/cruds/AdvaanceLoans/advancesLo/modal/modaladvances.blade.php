@@ -84,7 +84,7 @@
                         <select  wire:model.defer="id_percentaje" class="form-control @error('id_percentaje') is-invalid @enderror" id="id_percentaje">
                             <option value="">Eligue un porcentaje de interes</option>
                             <?php foreach($intereces as $interes): ?>                
-                                <option value="<?php echo $interes->id ?>"><?php echo $interes->description ?></option>
+                                <option value="<?php echo $interes->id ?>"><?php echo $interes->description.' - '.$interes->value.'%' ?></option>
                             <?php endforeach; ?>
                         </select>
                         @error('id_percentaje')
@@ -108,7 +108,7 @@
                         <select  wire:model.defer="id_percentaje" class="form-control @error('id_percentaje') is-invalid @enderror" id="id_percentaje">
                             <option value="">Eligue un porcentaje de interes</option>
                             <?php foreach($intereces as $interes): ?>                
-                                <option value="<?php echo $interes->id ?>"><?php echo $interes->description ?></option>
+                                <option value="<?php echo $interes->id ?>"><?php echo $interes->description.' - '.$interes->value.'%' ?></option>
                             <?php endforeach; ?>
                         </select>
                         @error('id_percentaje')
@@ -219,7 +219,7 @@ function buscarCuentaClave() {
 
 
 function buscarCuentaCodigo() {
-    $("#key_account").val("")
+    $("#key_account").val("");
     $.get('{!! route('discount.cuentas') !!}'+'?code='+$("#code_account").val()+'&'+'key='+$("#key_account").val(), function( datos ) {
         if(datos =="" || datos== null){
             if($("#code_account").val()==""){

@@ -10,6 +10,7 @@ use App\Exports\EstadoDeudaExport;
 use App\Exports\BlanceGeneralExport;
 use App\Exports\BlanceResultadoExport;
 use App\Exports\ConciliacionBancariaExport;
+use App\Exports\CobrosAcumuladosExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Controllers\Controller;
@@ -29,7 +30,9 @@ class ExcelGenerateController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-
+    public function CobrosAcumExcel(Request $request){
+        return (new CobrosAcumuladosExport($request->fechaini,$request->fechafin,$request->partner))->download('Cobros Acumulados.xlsx');
+    }
     public function ConciliacionBanco(Request $request){
         return (new ConciliacionBancariaExport($request->fechaini,$request->fechafin,$request->banco))->download('Conciliacion Bancaria.xlsx');
     }

@@ -36,6 +36,7 @@
                       <th class="px-4 py-2 text-center">Fecha</th>
                       <th class="px-4 py-2 text-center">Estado</th>
                       <th class="px-4 py-2 text-center" colspan="2">Acción</th>
+                      <th class="px-4 py-2 text-center">Descargar</th>
                   </tr>
               </thead>
               <tbody>
@@ -64,6 +65,9 @@
                                       Eliminar
                                   </button>
                               </td>
+                              <td class="text-center " width="20px">
+                                <a href="{{ route('account.asientopdf') }}?comp={{$p->id}}" onclick="mensajepdf();" download="Reporte" id="descagadirecta" class="btn btn-danger">PDF</a>
+                            </td>
                           </tr>
                       @endforeach
                   @else

@@ -36,9 +36,9 @@
                      <th class="px-4 py-2 text-center">Valor Total</th>
                      <th class="px-4 py-2 text-center">Meses Diferidos</th>
                      <th class="px-4 py-2 text-center">Valor Pendiente</th>
-                     <th class="px-4 py-2 text-center">Cuenta Contable</th>
                      <th style='font-size:15px' class="px-4 py-2 text-center">Estado</th>
                      <th class="px-4 py-2 text-center" colspan="2">Acción</th>
+                     <th class="px-4 py-2 text-center">Descargar</th>
                  </tr>
              </thead>
              <tbody>
@@ -54,7 +54,6 @@
                             <td class="text-center ">{{ $p->value_total }}</td>
                             <td class="text-center ">{{ $p->months }}</td>
                             <td class="text-center ">{{ $p->value_pending }}</td>
-                            <td class="text-center ">{{ $p->description }}</td>
                             <td class="text-center ">
                                 <span style="cursor: pointer;"
                                     wire:click.prevent="estadochange('{{ $p->id }}')"
@@ -73,6 +72,9 @@
                                      wire:click.prevent="$emit('eliminarRegistro','Seguro que deseas eliminar este Préstamo o Anticipo?','eliminarAdvances', {{ $p->id }})">
                                      Eliminar
                                  </button>
+                            </td>
+                            <td class="text-center " width="20px">
+                                <a href="{{ route('advances.prestamopdf') }}?comp={{$p->id}}" onclick="mensajepdf();" download="Reporte" id="descagadirecta" class="btn btn-danger">PDF</a>
                             </td>
                          </tr>
                      @endforeach

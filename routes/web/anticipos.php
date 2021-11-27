@@ -9,6 +9,7 @@ Route::prefix('advances')->group(function(){
               //RUTAS DE LOS TIPOS DE PLANES 
               Route::get('/advances-list', 'AdvancesLoan\AdvancesController@Advanceslist')->name('advances.crear'); //ruta tipo planes index 
               Route::get('advancesloan', ['uses' => 'AdvancesLoan\AdvancesController@buscarCuentas', 'as' => 'advances.cuentas']);
+              Route::get('pdfprestamos', ['uses' => 'AdvancesLoan\AdvancesController@DetallePrestamo', 'as' => 'advances.prestamopdf']);
        });
        
 });

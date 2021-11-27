@@ -9,6 +9,7 @@ use App\Traits\ServiceTrait;
 use Illuminate\Http\Request;
 use DB;
 use Carbon\Carbon;
+use Auth;
 class AdvancesController extends Controller
 {
 
@@ -43,6 +44,31 @@ class AdvancesController extends Controller
             $cuentasContables = DB::table('account_plan')->where('code_account',$code)->where('status','activo')->get();
             return (isset($cuentasContables) ? $cuentasContables : "") ;
          }
+    }
+
+    public function DetallePrestamo(Request $request)
+    {
+        $comprobante = $request->comp;
+        $fecha = Carbon::now();
+        $usuario = Auth::user()->name;
+        $descripcion = "";
+        $cabecera = DB::table('advances_loan')->where('id', $comprobante)->first();
+        if (isset($cabecera)) {
+            if( $cabecera->type_prestamo == "P" ){
+                $descripcion="Prestamo";
+            }else{
+                $descripcion="Anticipo";
+            }
+            $datosSocio = DB::table('partner')->where('id', $cabecera->id_partner)->first();
+            //$valorCheque = DB::table('voucher_detail')->where('id_vheader', $comprobante)->where('key_account',$datosSocio->key_account)->first();
+            $detalle = DB::table('detail_advance_loan')->where('id_advances_loan', $comprobante)->get();
+            $totalDeuda=DB::table('detail_advance_loan')->select(DB::raw("SUM(value_unit) as debito"))->where('id_advances_loan', $comprobante)->first();
+            $TotalInteres=DB::table('detail_advance_loan')->select(DB::raw("SUM(value_interes) as credito"))->where('id_advances_loan', $comprobante)->first();
+            $view = \View::make('Reportes.reportePrestamos',compact(['datosSocio','detalle','totalDeuda','TotalInteres','cabecera','fecha','usuario','descripcion']))->render();
+            $pdf = \App::make('dompdf.wrapper');
+            $pdf->loadHTML($view);
+            return $pdf->stream($descripcion." - ".$datosSocio->name_partner.'.pdf');
+        }
     }
   
 

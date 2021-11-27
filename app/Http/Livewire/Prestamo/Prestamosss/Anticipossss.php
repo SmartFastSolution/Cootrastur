@@ -42,7 +42,8 @@ class Anticipossss extends Component
 
     public function render()
     {
-        $intereces = DB::table('items_percentage')->select('id','description','code_account')->where('type', 'P')->get();
+        $intereces = DB::table('items_percentage')->select('id','description','code_account','value')->where('type', 'P')->get();
+        
         $data = ConfiguracionAdvances::select('advances_loan.id','advances_loan.code_account','account_plan.description','advances_loan.status','advances_loan.value_total','advances_loan.months','advances_loan.value_pending','advances_loan.type_prestamo','partner.name_partner','advances_loan.type_formula')
         ->leftJoin('account_plan', function($join){
             $join->on('account_plan.key_account', '=', 'advances_loan.key_account');
@@ -75,7 +76,7 @@ class Anticipossss extends Component
   
 
     public function resetModal(){
-        $this->reset(['key_account','code_account','type_prestamo','id_percentaje','value_total','months','id_partner','value_pending','status','description','editMode','identification']);
+        $this->reset(['key_account','code_account','type_prestamo','id_percentaje','value_total','months','value_pending','status','description','editMode','identification']);
         $this->resetValidation();
     }
 
@@ -190,12 +191,13 @@ class Anticipossss extends Component
         $separarFecha = explode("/", $fecha);
         $ano_real = $separarFecha[0];
         $mesesPago = (int)$separarFecha[1];
+        $flag = "NO";
         $date_payment = Carbon::now()->startOfMonth();
         if($estado->status == "Borrador"){
             $estado->status = $estado->status == 'Borrador' ? 'Aprobado' : 'Borrador';
             $valurDeuda = $estado->value_total;
-            for($i = 1; $i<=$estado->months; $i++){
-                
+            for($i = 0; $i<$estado->months; $i++){
+                $pagosMeses= $i;
                 $mesesPago = $mesesPago +1;
                 if($mesesPago == 13){
                     $mesesPago = 1;
@@ -207,13 +209,13 @@ class Anticipossss extends Component
                     $ano_real = $ano_real1[0];*/
                 }
                 if($estado->type_prestamo == "A"){
-        $temp_1 = $date_payment->addMonth()->startOfMonth();
-
+                    $temp_1 = $date_payment->addMonth()->startOfMonth();
+                    $flag = "SI";
                     $valorMensual = number_format($estado->value_total/$estado->months, 4, '.', "");
                     DB::table('detail_advance_loan')->insert([
                         'id_advances_loan' =>  $id,
                         'value_unit' => $valorMensual,
-                        'month_payment' => $i,
+                        'month_payment' => $pagosMeses+1,
                         'status' =>  "PENDIENTE",
                         'value_interes' => 0,
                         'month' => $mesesPago ,
@@ -222,53 +224,82 @@ class Anticipossss extends Component
                     ]);
                 }else{
                     if($estado->type_formula == "AL"){
-        $temp_1 = $date_payment->addMonth()->startOfMonth();
-
+                        $temp_1 = $date_payment->addMonth()->startOfMonth();
                         $porcentaje = DB::table('items_percentage')->where('id', $estado->id_percentaje)->first();
-                        $valorNeto = number_format($estado->value_total/$estado->months, 4, '.', "");
-                        $valorinteres = number_format($valurDeuda*($porcentaje->value/100), 4, '.', "");
-                        $valorMensual = number_format($valorNeto+$valorinteres, 4, '.', "");
-                        $valurDeuda = number_format($valurDeuda-$valorNeto, 4, '.', "");
-                        DB::table('detail_advance_loan')->insert([
-                            'id_advances_loan' =>  $id,
-                            'value_unit' => $valorMensual,
-                            'month_payment' => $i,
-                            'status' =>  "PENDIENTE",
-                            'value_interes' => $valorinteres,
-                            'value_pending' =>$valurDeuda,
-                            'month' => $mesesPago ,
-                            'year' => $ano_real,
-                            'date_payment' => $temp_1->format('Y-m').'-'.date( 't', strtotime( $date_payment->startOfMonth()->format('Y-m-d') )),
-                        ]);
-                        
+                        if(isset($porcentaje)){
+                            $valorNeto = number_format($estado->value_total/$estado->months, 4, '.', "");
+                            $valorinteres = number_format($valurDeuda*($porcentaje->value/100), 4, '.', "");
+                            $valorMensual = number_format($valorNeto+$valorinteres, 4, '.', "");
+                            $valurDeuda = number_format($valurDeuda-$valorNeto, 4, '.', "");
+                            DB::table('detail_advance_loan')->insert([
+                                'id_advances_loan' =>  $id,
+                                'value_unit' => $valorMensual,
+                                'month_payment' => $pagosMeses+1,
+                                'status' =>  "PENDIENTE",
+                                'value_interes' => number_format($valorInteres, 4, '.', "") ,
+                                'value_pending' =>$valurDeuda,
+                                'month' => $mesesPago ,
+                                'year' => $ano_real,
+                                'date_payment' => $temp_1->format('Y-m').'-'.date( 't', strtotime( $date_payment->startOfMonth()->format('Y-m-d') )),
+                            ]);
+                            $flag = "SI";
+                        }else{
+                            $flag = "NO";
+                        }
                     }else{
-        $temp_1 = $date_payment->addMonth()->startOfMonth();
-
+                        $temp_1 = $date_payment->addMonth()->startOfMonth();
                         $porcentaje = DB::table('items_percentage')->where('id', $estado->id_percentaje)->first();
-                        $divideno =$estado->value_total*($porcentaje->value/100);
-                        $divisor =  (1 - pow((1 +($porcentaje->value/100)), -$estado->months));
-                        $division = number_format($divideno/$divisor, 4, '.', "");
-                        $intereses = $valurDeuda*($porcentaje->value/100)*1; 
-                        $valorCapital = $division-$intereses;
-                        $valurDeuda = number_format($valurDeuda-$valorCapital, 4, '.', "");
-                        DB::table('detail_advance_loan')->insert([
-                            'id_advances_loan' =>  $id,
-                            'value_unit' => $division,
-                            'month_payment' => $i,
-                            'status' =>  "PENDIENTE",
-                            'value_interes' => $intereses,
-                            'value_pending' =>$valurDeuda,
-                            'month' => $mesesPago ,
-                            'year' => $ano_real,
-                            'date_payment' => $temp_1->format('Y-m').'-'.date( 't', strtotime( $date_payment->startOfMonth()->format('Y-m-d') )),
-                        ]);
-                        
+                        if(isset($porcentaje)){
+                           /* $divideno =$estado->value_total*($porcentaje->value/100);
+                            $divisor =  (1 - pow((1 +($porcentaje->value/100)), -$estado->months));
+                            $division = number_format($divideno/$divisor, 4, '.', "");
+                            $intereses = $valurDeuda*($porcentaje->value/100)*1; 
+                            $valorCapital = $division-$intereses;
+                            $valurDeuda = number_format($valurDeuda-$valorCapital, 4, '.', "");
+                            DB::table('detail_advance_loan')->insert([
+                                'id_advances_loan' =>  $id,
+                                'value_unit' => $division,
+                                'month_payment' => $i,
+                                'status' =>  "PENDIENTE",
+                                'value_interes' => $intereses,
+                                'value_pending' =>$valurDeuda,
+                                'month' => $mesesPago ,
+                                'year' => $ano_real,
+                                'date_payment' => $temp_1->format('Y-m').'-'.date( 't', strtotime( $date_payment->startOfMonth()->format('Y-m-d') )),
+                            ]);*/
+                            $interestotal =$estado->value_total*($porcentaje->value/100);
+                            $totalPagar = $estado->value_total + $interestotal;
+                            $CuotasPagar = $totalPagar/$estado->months;
+                            $valorInteres = $interestotal/$estado->months;
+                            $valornetoDeuda = $CuotasPagar-$valorInteres;
+                            $valurDeuda = number_format($valurDeuda-$valornetoDeuda, 4, '.', "");
+                            DB::table('detail_advance_loan')->insert([
+                                'id_advances_loan' =>  $id,
+                                'value_unit' => $CuotasPagar,
+                                'month_payment' => $pagosMeses+1,
+                                'status' =>  "PENDIENTE",
+                                'value_interes' =>number_format($valorInteres, 4, '.', "") ,
+                                'value_pending' =>$valurDeuda,
+                                'month' => $mesesPago ,
+                                'year' => $ano_real,
+                                'date_payment' => $temp_1->format('Y-m').'-'.date( 't', strtotime( $date_payment->startOfMonth()->format('Y-m-d') )),
+                            ]);
+                            $flag = "SI";
+                        }else{
+                            $flag = "NO";
+                        }
                     }
                 }
                 
             }
-            $estado->save();
-            $this->emit('info',['mensaje' => $estado->status == 'Aprobado' ? 'Estado Aprobado Correctamente' : 'Su prestamo o Anticipo ya se encuentra Aprobado']);
+            if($flag == "NO"){
+                $this->emit('info',['mensaje' => 'Configura un porcentaje de interes para este prestamo']);
+            }else{
+                $estado->save();
+                $this->emit('info',['mensaje' => $estado->status == 'Aprobado' ? 'Estado Aprobado Correctamente' : 'Su prestamo o Anticipo ya se encuentra Aprobado']);
+            }
+            
+            
        }else{
             $this->emit('info',['mensaje' => $estado->status == 'Aprobado' ? 'Su prestamo o Anticipo ya se encuentra Aprobado' : '']);
        }
@@ -278,8 +309,10 @@ class Anticipossss extends Component
    public function eliminarAdvances($id)
    {
        $c = ConfiguracionAdvances::find($id);
+       
        $tipo= $c->type_prestamo;
        $c->delete();
+       DB::table('detail_advance_loan')->where('id_advances_loan',$id)->delete();
        if($tipo == "A"){
             $this->emit('info',['mensaje' => 'Anticipo Eliminado Correctamente']);
        }else{

@@ -208,36 +208,17 @@ footer {
 					</tr>
 					<tr>
 						<td><span class="stl_10" style="font-weight:bold;color:black;">Fecha Comprobante: </span></td>
-					   <td><span class="stl_10" style="color:black;">{{$cabecera->date_registre}}</span></td>
-					   <td><span class="stl_10" style="font-weight:bold;color:black;">Cta: </span></td>
-					   <td><span class="stl_10" style="color:black;width:50px;" >{{$banco->description}}</span></td>
-					   
-				   	</tr>
-					@if($cabecera->type_document_recibe != "R")
-				   	<tr>
-						<td><span class="stl_10" style="font-weight:bold;color:black;">Tipo Documento: </span></td>
-						@if($cabecera->type_document == "C")
-							<td><span class="stl_10" style="color:black;">CHEQUE</span></td>
-						@else
-							<td><span class="stl_10" style="color:black;">FACTURA</span></td>
+					   	<td><span class="stl_10" style="color:black;">{{$cabecera->date_voucher}}</span></td>
+						@if($datosSocio != "" || $datosSocio != null)
+					   		<td><span class="stl_10" style="font-weight:bold;color:black;">Identificación: </span></td>
+							<td><span class="stl_10" style="color:black;">{{$datosSocio->identification}}</span></td>
+							<td><span class="stl_10" style="font-weight:bold;color:black;">Beneficiario: </span></td>
+				   			<td><span class="stl_10" style="color:black;">{{$datosSocio->name_partner}}</span></td>
 						@endif
-						<td><span class="stl_10" style="font-weight:bold;color:black;">Fecha Documento: </span></td>
-				   		<td><span class="stl_10" style="color:black;">{{$cabecera->date_check}}</span></td>
-				   		<td><span class="stl_10" style="font-weight:bold;color:black;">Numero Documento: </span></td>
-				   		<td><span class="stl_10" style="color:black;width:50px;" >{{$cabecera->number_check}}</span></td>
-			   		</tr>
-					@endif
-					<tr>
-						<td><span class="stl_10" style="font-weight:bold;color:black;">Valor: </span></td>
-					   	<td><span class="stl_10" style="color:black;width:50px;" >{{$cabecera->total_value*-1}}</span></td>
-						<td><span class="stl_10" style="font-weight:bold;color:black;">Identificación: </span></td>
-						<td><span class="stl_10" style="color:black;">{{$datosSocio->identification}}</span></td>
-						<td><span class="stl_10" style="font-weight:bold;color:black;">Beneficiario: </span></td>
-				   		<td><span class="stl_10" style="color:black;">{{$datosSocio->name_partner}}</span></td>
-			   		</tr>
+				   	</tr>
 					<tr>
 						<td><span class="stl_10" style="font-weight:bold;color:black;">Detalle: </span></td>
-						<td><span class="stl_10" style="color:black;">{{$cabecera->detail_voucher}}</span></td>
+						<td><span class="stl_10" style="color:black;">{{$cabecera->header_description}}</span></td>
 			   		</tr>
 
                 </table>
@@ -256,8 +237,8 @@ footer {
 					<td style="text-align:right;"><span class="stl_10 ">	{{ $comp->key_account }} 	</span></td>
 					<td style="text-align:left;"><span class="stl_10" >{{ $comp->code_account }}</span></td>
 					<td style="text-align:center;"><span class="stl_12 stl_08" >{{ $comp->description }}</span></td>
-					<td style="text-align:right;"><span class="stl_10" > {{ $comp->value_debito }}</span></td>
-					<td style="text-align:right;"><span class="stl_10" >{{ $comp->value_credito }}</span></td>
+					<td style="text-align:right;"><span class="stl_10" > {{ $comp->value_debito,0 }}</span></td>
+					<td style="text-align:right;"><span class="stl_10" >{{ ($comp->value_credito == 0 ? 0 : $comp->value_credito*-1) }}</span></td>
 				@endforeach
 
 				

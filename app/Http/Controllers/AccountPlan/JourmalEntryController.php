@@ -13,6 +13,7 @@ use Livewire\WithPagination;
 use Validator;
 use DB;
 use Carbon\Carbon;
+use Auth;
 
 class JourmalEntryController extends Controller
 {
@@ -130,6 +131,35 @@ class JourmalEntryController extends Controller
         return $nuevaData;
     }
 
+    public function descargarPDF(Request $request){
+        $comprobante = $request->comp;
+        $fecha = Carbon::now();
+        $usuario = Auth::user()->name;
+        $cabecera = DB::table('account_header')->where('id', $comprobante)->first();
+        if (isset($cabecera)) {
+            $cuentaSocio = DB::table('account_detail')
+                            ->join('partner', 'partner.code_account', '=', 'account_detail.code_account')
+                            ->where('id_header', $comprobante)->first();
+            $detalle = DB::table('account_detail')
+                        ->select('account_detail.key_account', 'account_detail.code_account','account_plan.description', 'account_detail.value_debito', 'account_detail.value_credito')
+                        ->join('account_plan', 'account_plan.code_account', '=', 'account_detail.code_account') 
+                        ->where('id_header', $comprobante)->get();
+            if(isset($cuentaSocio)){
+                $datosSocio = DB::table('partner')->where('code_account', $cuentaSocio->code_account)->first();
+            }else{
+                $datosSocio = "";
+            }
+            
+            $total_debito=DB::table('account_detail')->select(DB::raw("SUM(value_debito) as debito"))->where('id_header', $comprobante)->first();
+            $total_crebito=DB::table('account_detail')->select(DB::raw("SUM(value_credito) as credito"))->where('id_header', $comprobante)->first();
+            $view = \View::make('Reportes.reporteAsientos',compact(['datosSocio','detalle','total_debito','total_crebito','cabecera','fecha','usuario']))->render();
+            $pdf = \App::make('dompdf.wrapper');
+            $pdf->loadHTML($view);
+            return $pdf->stream("Asiento contable ".$cabecera->number_voucher.'.pdf');
+            //return $pdf->download("Comprobante ".$cabecera->number_voucher.'.pdf');
+        }
+    }
+
     public function actualizarAsiento(Request $request){
         $codigo = $request->code_voucher;
         $fechaV = $request->date_voucher;
@@ -215,6 +245,7 @@ class JourmalEntryController extends Controller
                             'year' => $separarFecha[0],
                             'value_pending'=>($d->value_debito > 0 ? $d->value_debito : $d->value_credito * -1),
                             'number_voucher'=>$estado->number_voucher,
+                            'value_total'=>($d->value_debito > 0 ? $d->value_debito : $d->value_credito * -1),
                         ]);
                     }
                     /*$descuentoDisminuir = DB::table('configuration_discount')->where('code_account',$d->code_account)->where('key_account',$d->key_account)->where('id_partner',$idSocio)->first();

@@ -21,6 +21,9 @@ Route::prefix('reportes')->group(function(){
 
         Route::get('/conciliacion', 'Reportes\ConciliacionBancariaController@conciliacionlist')->name('reportes.indexconciliacion'); 
         Route::get('/conciliacionexcel', 'Reportes\ExcelGenerateController@ConciliacionBanco')->name('reportes.verconciliacion');
+
+        Route::get('/cobrosacum', 'Reportes\CobrosAcumuladosController@cobrosacumlist')->name('reportes.indexcobros'); 
+        Route::get('/cobrosacumexcel', 'Reportes\ExcelGenerateController@CobrosAcumExcel')->name('reportes.vercobrosa');
  });
 
 
