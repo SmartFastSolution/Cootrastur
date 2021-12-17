@@ -24,6 +24,15 @@ Route::prefix('reportes')->group(function(){
 
         Route::get('/cobrosacum', 'Reportes\CobrosAcumuladosController@cobrosacumlist')->name('reportes.indexcobros'); 
         Route::get('/cobrosacumexcel', 'Reportes\ExcelGenerateController@CobrosAcumExcel')->name('reportes.vercobrosa');
+
+        Route::get('/detalle-cuenta', 'Reportes\AccountDetailController@detallelist')->name('reportes.indexdetailaccount'); 
+        Route::get('/buscarCuenta', 'Reportes\AccountDetailController@buscarcuenta')->name('reportes.buscarcuenta');
+        Route::get('/detalle-cuenta-pdf', 'Reportes\AccountDetailController@DetalleCuenta')->name('reportes.verdetallecuenta');
+        Route::get('/detalle-cuenta-excel', 'Reportes\ExcelGenerateController@AccountDetailExcel')->name('reportes.verdetallecuentaexcel'); 
+
+        Route::get('/detalle-socio', 'Reportes\SociosGeneralesController@SociosGeneraleslist')->name('reportes.indexsociogeneral'); 
+        Route::get('/reportesocio', 'Reportes\SociosGeneralesController@GeneralSocio')->name('reportes.sociodetalle');
+        //Route::get('/detalle-cuenta-excel', 'Reportes\AccountDetailController@DetalleCuenta')->name('reportes.verdetallecuenta');
  });
 
 

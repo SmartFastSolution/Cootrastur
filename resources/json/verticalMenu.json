@@ -176,8 +176,23 @@
                     "name"  : "Cobros Acumulados",
                     "can"   : "reportes"
 
-                }
+                },
+                {
 
+                    "route" : "reportes.indexdetailaccount",
+                    "url"   : "reportes/detalle-cuenta",
+                    "name"  : "Movimientos por cuenta",
+                    "can"   : "reportes"
+
+                },
+                {
+
+                    "route" : "reportes.indexsociogeneral",
+                    "url"   : "reportes/detalle-socio",
+                    "name"  : "Reporte general socios",
+                    "can"   : "reportes"
+
+                }
             ]
         }
 

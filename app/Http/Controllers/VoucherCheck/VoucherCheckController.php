@@ -293,12 +293,13 @@ class VoucherCheckController extends Controller
     public function CuentasProveedor(Request $request){
         $idProveedor = $request->code;
         $fechaDia = Carbon::now()->format('Y/m/d');
+        $finalMes = Carbon::now()->endOfMonth()->format('Y/m/d');
         $year = Carbon::now()->format('Y');
         $mes = Carbon::now()->format('m');
         $data = [];
         $configs = include('../config/config.php');
         $cabeceraProveedor = DB::table('partner')->where('id', $idProveedor)->first();
-        
+        //return $idProveedor;
         $datosCobro= DB::table('charges')
                             ->select('charges.code_account','account_plan.description','charges.type_charges','charges.value','charges.key_account','charges.type_cobros')
                             ->leftJoin('account_plan', function($join){
@@ -349,7 +350,8 @@ class VoucherCheckController extends Controller
             $deuda = $datosDeuda->toArray();
             foreach ($deuda as $prestamos){
                 $detalle = "";
-                $detalleDeuda = DB::table('detail_advance_loan')->where('id_advances_loan', $prestamos->id)->where('status',"PENDIENTE")->whereDate('date_payment', '<=',$fechaDia)->where('year',$year)->orderBy('month_payment')->first();
+                //$detalleDeuda = DB::table('detail_advance_loan')->where('id_advances_loan', $prestamos->id)->where('status',"PENDIENTE")->whereDate('date_payment', '<=',$fechaDia)->where('year',$year)->orderBy('month_payment')->first();
+                $detalleDeuda = DB::table('detail_advance_loan')->where('id_advances_loan', $prestamos->id)->where('status',"PENDIENTE")->whereDate('date_payment', '<=',$finalMes)->where('year',$year)->orderBy('month_payment')->first();
                 
                 if(isset($detalleDeuda)){
                     
@@ -386,7 +388,7 @@ class VoucherCheckController extends Controller
         }
         $fechaDia = Carbon::now()->format('Y/m/d');
         $separarFecha = explode("/", $fechaDia);
-        $datosProveedor = DB::table('partner_aditional')->where('id_partner', $idProveedor)->first();
+        $datosProveedor = DB::table('partner')->where('id', $idProveedor)->where('status','activo')->first();
         if(isset($datosProveedor)){
             //$cuentaProveedor = DB::table('account_plan')->where('display', 'S')->where('status','activo')->where('key_account', $cabeceraProveedor->key_account)->first();
             $automaticos= DB::table('partner_aditional_detail')->where('status',"PENDIENTE")->where('id_partner',$idProveedor)->where('month','<=', $separarFecha[1])->where('year','<=', $separarFecha[0])->get();
@@ -407,10 +409,8 @@ class VoucherCheckController extends Controller
                 ];
             }
             return $data;   
-        }else{
-            return "ERROR";
         }
-
+        return $data;
         
     }
 

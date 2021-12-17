@@ -91,7 +91,8 @@ class deudasPagar extends Command
                             }
                         }
                         $valorTotal = $valorTotal + $cuentaDeuda->value;
-                        $result1 = DB::table('account_plan')->where('code_account',$cuentaDeuda->code_account)->where('key_account',$cuentaDeuda->key_account)->where('status', 'activo')->first();
+                        
+                        $result1 = DB::table('account_plan')->where('code_account',trim(rtrim($cuentaDeuda->code_account, " "), " "))->where('key_account',trim(rtrim($cuentaDeuda->key_account, " "), " "))->where('status', 'activo')->first();
                         DB::table('account_detail')->insert([
                             'key_account' =>  $cuentaDeuda->key_account,
                             'code_account' => $cuentaDeuda->code_account,

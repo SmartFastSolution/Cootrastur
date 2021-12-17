@@ -11,6 +11,7 @@ use App\Exports\BlanceGeneralExport;
 use App\Exports\BlanceResultadoExport;
 use App\Exports\ConciliacionBancariaExport;
 use App\Exports\CobrosAcumuladosExport;
+use App\Exports\DetallecuentaExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Controllers\Controller;
@@ -58,6 +59,15 @@ class ExcelGenerateController extends Controller
     public function IngresoEgresoExcel(Request $request){
         $comprobante = DB::table('voucher_header')->where('id', $request->comp)->first();
         return (new IngresoEgresoExport($request->comp))->download('Comprobante '.$comprobante->number_voucher.'.xlsx');
+    }
+
+    public function AccountDetailExcel(Request $request){
+        $comprobante = DB::table('account_plan')->where('code_account', $request->cuenta)->where('key_account', $request->codigo)->first();
+        if(!isset($comprobante)){
+            $comprobante = DB::table('account_plan')->where('code_account', $request->codigo)->where('key_account', $request->cuenta)->first();
+        }
+        $nombreCuenta = rtrim(ltrim($comprobante->description," ")," ");
+        return (new DetallecuentaExport($request->fechaini,$request->fechafin,$request->cuenta,$request->codigo))->download('Detalle de '.$nombreCuenta.'.xlsx');
     }
 
 }
